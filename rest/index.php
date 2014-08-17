@@ -26,7 +26,7 @@ if (isset($_POST['act'])) {
                 if (is_string($_POST['data'])) {
                     $params = json_decode($_POST['data'], 1);
                 } else {
-                    die($_POST['data']);
+                    $params = $_POST['data'];
                 }
             }
             
