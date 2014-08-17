@@ -12,13 +12,12 @@ var questionario = function() {
                 questionario.ajaxContent(fd);
             });
 
-//            $("#bt-cadastrar-videos").on("click", function() {
-//                var fd = new FormData();
-//                fd.append("titulo", $("#titulo").val());
-//                fd.append("url", $("#url").val());
-//                fd.append("tipo", $(this).attr("data-type"));
-//                questionario.ajaxContent(fd);
-//            });
+            $("#bt-cadastrar-questionario").on("click", function() {
+                var fd = new FormData();
+                fd.append("titulo", $("#titulo").val());
+                fd.append("tipo", $(this).attr("data-type"));
+                questionario.ajaxContent(fd);
+            });
 
         },
         ajaxContent: function(fd) {

@@ -67,6 +67,14 @@ if ($_POST) {
                     "redirect" => "#/videos/listar",
                 ));
                 break;
+            case "cadastrarQuestionario":
+                $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
+                $idProf = $_SESSION['user']['id'];
+                $q = mysqli_query($con, "INSERT INTO questionario (titulo, idProfessor) values ('{$titulo}','{$idProf}')");
+                echo json_encode(array(
+                    "redirect" => "#/questionario/listar",
+                ));
+                break;
             case "cadastrarSlidesImg":
                 $idSlide = (isset($_POST['idSlide'])) ? $_POST['idSlide'] : null;
                 $url = (isset($_POST['url'])) ? $_POST['url'] : null;

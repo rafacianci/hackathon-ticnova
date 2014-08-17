@@ -5,7 +5,7 @@ require_once '../../query.php';
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        Cadastrar Slide
+        Cadastrar Questionário
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -17,8 +17,8 @@ require_once '../../query.php';
         </form>
     </div>
     <div class="panel-footer">
-        <button type="submit" id="bt-cadastrar-slides" data-type="cadastrarSlides" class="btn btn-success">Salvar</button>
+        <button type="submit" id="bt-cadastrar-questionario" data-type="cadastrarQuestionario" class="btn btn-success">Salvar</button>
     </div>
 </div>
 <!-- javascrtipt da Página -->
-<script src="js/slides/slides.js"></script>
+<script src="js/questionario/questionario.js"></script>
