@@ -1,0 +1,8 @@
+table .ajax i,
+table .ajax-confirm i {
+    font-size: 19px;
+}
+
+table .ajax-confirm i:hover {
+    color: #000;
+}
