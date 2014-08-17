@@ -35,6 +35,7 @@ var videos = function() {
                 processData: false, // tell jQuery not to process the data
                 contentType: false   // tell jQuery not to set contentType
             }).success(function(msg) {
+                console.log(msg);
                 try {
                     data = JSON.parse(msg);
                     if (data.redirect) {
