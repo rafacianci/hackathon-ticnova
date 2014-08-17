@@ -61,7 +61,6 @@ if (isset($_POST['act'])) {
                         $material = array();
                         switch ($row['tipo']) {
                             case MATERIAL_QUESTIONARIO:
-                                $status = QUESTIONARIO_ATIVO;
                                 $queryQuestionario = "select q.idQuestionario, q.titulo q_titulo, q2.idQuestao, q2.titulo q2_titulo from questionario q "
                                         . "left join questao q2 on (q.idQuestionario = q2.idQuestionario) "
                                         . "where (q.idQuestionario = {$row['idMaterial']}) "
@@ -138,6 +137,7 @@ if (isset($_POST['act'])) {
                                     );
                                     $rowVideo = mysqli_fetch_assoc($qVideo);
                                     $material['url'] = $rowVideo['url'];
+                                    $material['titulo'] = $rowVideo['titulo'];
                                 }
                                 break;
 
