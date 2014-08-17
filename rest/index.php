@@ -1,5 +1,7 @@
 <?php
 
+require_once '../db.php';
+
 $retorno = array(
     'cd_error' => null,
     'msg_error' => null,
@@ -14,6 +16,11 @@ if (isset($_POST['act'])) {
         case 'test':
             $retorno['msg'] = 'Test OK';
             retorno($retorno);
+            break;
+        case 'pegarAula':
+            $params = (isset($_POST['data'])) ? json_decode($_POST['data'], 1) : null;
+            $con = Database::getCon();
+            $q = mysqli_query($con, "select * from ");
             break;
 
         default:
