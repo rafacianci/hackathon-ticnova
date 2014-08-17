@@ -164,7 +164,36 @@ if (isset($_POST['act'])) {
                 retorno($retorno);
             }
             break;
+        case 'verificaAluno':
+            $params = null;
+            if (isset($_POST['data'])) {
+                if (is_string($_POST['data'])) {
+                    $params = json_decode($_POST['data'], 1);
+                } else {
+                    $params = $_POST['data'];
+                }
 
+
+                $login = (isset($params['login'])) ? (string) $params['login'] : null;
+                $senha = (isset($params['senha'])) ? (string) $params['senha'] : null;
+
+
+                if (null !== $login && null !== $senha) {
+                    $sql = "select * from aluno where login = '$login' and senha = '$senha' ";
+                }
+
+                $con = Database::getCon();
+                $q = mysqli_query($con, $sql);
+                if (mysqli_num_rows($q)) {
+                    while ($row = mysqli_fetch_assoc($q)) {
+                        $retorno = array_merge($row, $retorno);
+                        retorno($retorno);
+                    }
+                } else {
+                    retorno($retorno["msg_error"] = "Aluno nao encontrado");
+                }
+            }
+            break;
         default:
             break;
     }
