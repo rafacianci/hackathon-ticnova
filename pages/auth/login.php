@@ -3,10 +3,10 @@ require_once '../../config.php';
 require_once '../../query.php';
 
 if ($_POST) {
-    $login = (isset($_POST['login'])) ? $_POST['login'] : null;
+    $idAluno = (isset($_POST['login'])) ? $_POST['login'] : null;
     $senha = (isset($_POST['senha'])) ? $_POST['senha'] : null;
     
-    Query::login($login, md5($senha));
+    Query::login($idAluno, md5($senha));
 }
 ?>
 <!DOCTYPE html>

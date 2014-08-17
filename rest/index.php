@@ -1,7 +1,6 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: text/html; charset=utf-8');
 
 require_once '../config.php';
 require_once '../db.php';
@@ -32,6 +31,25 @@ if (isset($_POST['act'])) {
             }
 
             $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
+            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
+
+            $queryRespAluno = "select q.idQuestao from resposta r "
+                    . "left join alternativa a on (a.idAlternativa = r.idAlternativa) "
+                    . "left join questao q on (q.idQuestao = a.idQuestao) "
+                    . "where idAluno = {$idAluno}"
+            ;
+            $con = Database::getCon();
+            $qRespAluno = mysqli_query($con, $queryRespAluno);
+
+            $respondidas = array();
+            if (mysqli_num_rows($qRespAluno)) {
+                while ($row = mysqli_fetch_assoc($qRespAluno)) {
+                    $respondidas[] = $row['idQuestao'];
+                }
+                $respondidas = join(',', $respondidas);
+            } else {
+                $respondidas = null;
+            }
 
             if (null !== $chave) {
                 $query = "select ga.*, am.*, a.titulo a_titulo, a.data a_data from grupoaula ga "
@@ -40,7 +58,6 @@ if (isset($_POST['act'])) {
                         . "where ga.chave = '{$chave}'"
                 ;
 
-                $con = Database::getCon();
                 $q = mysqli_query($con, $query);
 
                 if (mysqli_num_rows($q)) {
@@ -64,17 +81,17 @@ if (isset($_POST['act'])) {
                             $material = array();
                             switch ($row['tipo']) {
                                 case MATERIAL_QUESTIONARIO:
-                                    $queryQuestionario = "select q.idQuestionario, q.titulo q_titulo, q2.idQuestao, q2.titulo q2_titulo from questionario q "
-                                            . "left join questao q2 on (q.idQuestionario = q2.idQuestionario) "
-                                            . "where (q.idQuestionario = {$row['idMaterial']}) "
+                                    $queryQuestionario = "select q.idQuestionario, q.titulo q_titulo"
+                                            . " from questionario q "
+                                            . "where (q.idQuestionario = {$row['idMaterial']})"
                                     ;
+
                                     $qQuestionario = mysqli_query($con, $queryQuestionario);
 
                                     if (mysqli_num_rows($qQuestionario)) {
                                         $material = array(
                                             'idMaterial' => $row['idMaterial'],
                                             'tipo' => $row['tipo'],
-                                                //'perguntas' => array(),
                                         );
 
                                         while ($rowQuestionario = mysqli_fetch_assoc($qQuestionario)) {
@@ -89,28 +106,34 @@ if (isset($_POST['act'])) {
                                                         . "left join alternativa a on (a.idQuestao = q.idQuestao) "
                                                         . "where (q.idQuestionario = {$idQuestionario}) "
                                                 ;
+                                                if (null !== $respondidas) {
+                                                    $queryQuestao .= " and (q.idQuestao not in ({$respondidas}))";
+                                                }
+
                                                 $qQuestao = mysqli_query($con, $queryQuestao);
 
                                                 if (mysqli_num_rows($qQuestao)) {
+                                                    $i = -1;
                                                     while ($rowQuestao = mysqli_fetch_assoc($qQuestao)) {
                                                         if ($idQuestao !== $rowQuestao['idQuestao']) {
+                                                            $i++;
                                                             $idQuestao = $rowQuestao['idQuestao'];
-                                                            $pergunta = array(
+                                                            $material['perguntas'][$i] = array(
                                                                 'titulo' => $rowQuestao['q_titulo'],
                                                                 'alternativas' => array(),
                                                             );
                                                         }
 
-                                                        $pergunta['alternativas'][] = array(
-                                                            'alternativa' => $rowQuestao['idAlternativa'],
-                                                            'titulo' => $rowQuestao['titulo'],
-                                                            'correta' => $rowQuestao['correta'],
-                                                        );
+                                                        if ($idQuestao == $rowQuestao['idQuestao']) {
+                                                            $material['perguntas'][$i]['alternativas'][] = array(
+                                                                'alternativa' => $rowQuestao['idAlternativa'],
+                                                                'titulo' => $rowQuestao['titulo'],
+                                                                'correta' => $rowQuestao['correta'],
+                                                            );
+                                                        }
                                                     }
                                                 }
                                             }
-
-                                            $material['perguntas'][] = $pergunta;
                                         }
                                     }
                                     break;
@@ -185,12 +208,12 @@ if (isset($_POST['act'])) {
                 }
 
 
-                $login = (isset($params['login'])) ? (string) $params['login'] : null;
+                $idAluno = (isset($params['login'])) ? (string) $params['login'] : null;
                 $senha = (isset($params['senha'])) ? (string) $params['senha'] : null;
 
 
-                if (null !== $login && null !== $senha) {
-                    $sql = "select * from aluno where login = '$login' and senha = '$senha' ";
+                if (null !== $idAluno && null !== $senha) {
+                    $sql = "select * from aluno where login = '$idAluno' and senha = '$senha' ";
                 }
 
                 $con = Database::getCon();
@@ -205,6 +228,36 @@ if (isset($_POST['act'])) {
                     retorno($retorno);
                 }
             }
+            break;
+        case 'salvarResposta':
+            $params = null;
+            if (isset($_POST['data'])) {
+                if (is_string($_POST['data'])) {
+                    $params = json_decode($_POST['data'], 1);
+                } else {
+                    $params = $_POST['data'];
+                }
+            }
+
+            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
+            $id = (isset($params['id'])) ? (int) $params['id'] : null;
+
+            if ((null !== $idAluno) and ( null !== $id)) {
+                $con = Database::getCon();
+                $queryResposta = "insert into resposta (idAluno, idAlternativa, idGrupo) values({$idAluno}, {$id}, ("
+                        . "select idGrupo from grupoaluno where idAluno = {$idAluno}))";
+                $qResposta = mysqli_query($con, $queryResposta);
+
+                if (!$qResposta) {
+                    $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
+                }
+            } else if (null == $id) {
+                $retorno['msg_error'] = 'Informar uma resposta';
+            } else {
+                $retorno['msg_error'] = 'Aluno nao identificado';
+            }
+
+            retorno($retorno);
             break;
         default:
             break;
