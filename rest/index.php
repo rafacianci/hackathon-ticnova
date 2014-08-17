@@ -34,15 +34,16 @@ if (isset($_POST['act'])) {
 //            $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
 //            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
             if ((isset($_POST['chave'])) && (isset($_POST['idAluno']))) {
-                $idAluno = $_POST['chave'];
-                $chave = $_POST['idAluno'];
+                $idAluno = $_POST['idAluno'];
+                $chave = $_POST['chave'];
 
 
                 $queryRespAluno = "select q.idQuestao from resposta r "
                         . "left join alternativa a on (a.idAlternativa = r.idAlternativa) "
                         . "left join questao q on (q.idQuestao = a.idQuestao) "
-                        . "where idAluno = {$idAluno}"
+                        . "where idAluno = '$idAluno'"
                 ;
+                //print_r($queryRespAluno);exit;  
                 $con = Database::getCon();
                 $qRespAluno = mysqli_query($con, $queryRespAluno);
 
