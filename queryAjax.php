@@ -50,6 +50,14 @@ if ($_POST) {
                     "redirect" => "#/aula/listar",
                 ));
                 break;
+            case "cadastrarSlides":
+                $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
+                $idProf = $_SESSION['user']['id'];
+                $q = mysqli_query($con, "INSERT INTO slide (titulo, idProfessor) values ('{$titulo}','{$idProf}')");
+                echo json_encode(array(
+                    "redirect" => "#/slides/listar",
+                ));
+                break;
             case "cadastrarVideos":
                 $url = (isset($_POST['url'])) ? $_POST['url'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
@@ -57,6 +65,32 @@ if ($_POST) {
                 $q = mysqli_query($con, "INSERT INTO video (titulo, url, idProfessor) values ('{$titulo}','{$url}','{$idProf}')");
                 echo json_encode(array(
                     "redirect" => "#/videos/listar",
+                ));
+                break;
+            case "cadastrarSlidesImg":
+                $idSlide = (isset($_POST['idSlide'])) ? $_POST['idSlide'] : null;
+                $url = (isset($_POST['url'])) ? $_POST['url'] : null;
+                $q = mysqli_query($con, "INSERT INTO slideimg (url, ordem, idSlide) values ('{$url}',0,'{$idSlide}')");
+                echo "INSERT INTO slideimg (url, ordem, idSlide) values ('{$url}',0,'{$idSlide}')";
+                echo json_encode(array(
+                    "redirect" => "#/slides/cadastrarImg/idSlide/".$idSlide,
+                ));
+                break;
+            case "excluirImg":
+                $idImg = (isset($_POST['idImg'])) ? $_POST['idImg'] : null;
+                $idSlide = (isset($_POST['idSlide'])) ? $_POST['idSlide'] : null;
+                $q = mysqli_query($con, "DELETE FROM slideimg WHERE idImg = {$idImg}");
+                echo json_encode(array(
+                    "redirect" => "#/slides/cadastrarImg/idSlide/".$idSlide,
+                ));
+                break;
+            case "editarQuestionario":
+                $idQuest = (isset($_POST['idQuestionario'])) ? $_POST['idQuestionario'] : null;
+                $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
+                $q = mysqli_query($con, "UPDATE questionario SET titulo = '{$titulo}' where idQuestionario = {$idQuest}");
+                
+                echo json_encode(array(
+                    "redirect" => "#/questionario/editar/idQuestionario/".$idQuest,
                 ));
                 break;
             case "relacionarArquivo":

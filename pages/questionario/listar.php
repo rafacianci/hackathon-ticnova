@@ -2,12 +2,12 @@
 require_once '../../config.php';
 require_once '../../query.php';
 
-$videos = Query::pegarVideos($_SESSION['user']['id']);
+$questionario = Query::pegarQuestionarios($_SESSION['user']['id']);
 
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        Vídeos
+        Questionários
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -17,20 +17,19 @@ $videos = Query::pegarVideos($_SESSION['user']['id']);
                     <tr>
                         <th>#</th>
                         <th>Título</th>
-                        <th>URL</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($videos as $video) {
+                    foreach ($questionario as $slide) {
                         ?>
                         <tr>
-                            <td><?php echo $video['idVideo']; ?></td>
-                            <td><?php echo $video['titulo']; ?></td>
-                            <td><?php echo $video['url']; ?></td>
+                            <td><?php echo $slide['idQuestionario']; ?></td>
+                            <td><?php echo $slide['titulo']; ?></td>
                             <td>
-                                <a href="#/videos/editar/idVideo/<?php echo $video['idVideo'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
+                                <a href="#/questionario/editar/idQuestionario/<?php echo $slide['idQuestionario'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
+                                <!--<a href="#/slides/cadastrarImg/idSlide/<?php echo $slide['idSlide'];?>" class="ajax"><i class="fa fa-image fa-1x col-lg-1"></i></a>-->
                             </td>
                         </tr>
                         <?php
@@ -44,4 +43,4 @@ $videos = Query::pegarVideos($_SESSION['user']['id']);
     <!-- /.panel-body -->
 </div>
 <!-- javascrtipt da Página -->
-<script src="js/videos/videos.js"></script>
+<script src="js/questionario/questionario.js"></script>

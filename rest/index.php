@@ -234,36 +234,33 @@ if (isset($_POST['act'])) {
             }
             break;
         case 'salvarResposta':
-            $params = null;
-            if (isset($_POST['data'])) {
-                if (is_string($_POST['data'])) {
-                    $params = json_decode($_POST['data'], 1);
+            if ((isset($_POST['idAluno'])) && (isset($_POST['id']))) {
+
+                $idAluno = $_POST['idAluno'];
+                $id = $_POST['id'];
+
+
+
+                if ((null !== $idAluno) and ( null !== $id)) {
+                    $con = Database::getCon();
+                    $queryResposta = "insert into resposta (idAluno, idAlternativa, idGrupo) values({$idAluno}, {$id}, ("
+                            . "select idGrupo from grupoaluno where idAluno = {$idAluno}))";
+                    $qResposta = mysqli_query($con, $queryResposta);
+
+                    if (!$qResposta) {
+                        $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
+                    }
+                } else if (null == $id) {
+                    $retorno['msg_error'] = 'Informar uma resposta';
                 } else {
-                    $params = $_POST['data'];
+                    $retorno['msg_error'] = 'Aluno nao identificado';
                 }
-            }
-
-            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
-            $id = (isset($params['id'])) ? (int) $params['id'] : null;
-
-            if ((null !== $idAluno) and ( null !== $id)) {
-                $con = Database::getCon();
-                $queryResposta = "insert into resposta (idAluno, idAlternativa, idGrupo) values({$idAluno}, {$id}, ("
-                        . "select idGrupo from grupoaluno where idAluno = {$idAluno}))";
-                $qResposta = mysqli_query($con, $queryResposta);
-
-                if (!$qResposta) {
-                    $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
-                }
-            } else if (null == $id) {
-                $retorno['msg_error'] = 'Informar uma resposta';
             } else {
-                $retorno['msg_error'] = 'Aluno nao identificado';
+                $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
             }
-
             retorno($retorno);
             break;
         default:
             break;
     }
-}
+}    
