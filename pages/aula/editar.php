@@ -24,19 +24,19 @@ if ($_GET['idAula']) {
     <!-- /.panel-heading -->
     <div class="panel-body">
         <form id="editarAula" method="POST">
-            <input name="idAula" type="hidden" value="<?php echo $_REQUEST['idAula']; ?>" >
+            <input id="idAula" name="idAula" type="hidden" value="<?php echo $_REQUEST['idAula']; ?>" >
             <div class="form-group col-lg-2">
                 <label>Data</label>
-                <input name="data" class="form-control" type="text" value="<?php echo dateView($aula["data"]); ?>">
+                <input id="data" name="data" class="form-control" type="text" value="<?php echo dateView($aula["data"]); ?>">
             </div>
             <div class="form-group col-lg-10">
                 <label>Título</label>
-                <input name="titulo" class="form-control" type="text" value="<?php echo $aula["titulo"]; ?>">
+                <input id="titulo" name="titulo" class="form-control" type="text" value="<?php echo $aula["titulo"]; ?>">
             </div>
         </form>
     </div>
     <div class="panel-footer">
-        <button type="submit" id="bt-editar-aula" form="editarAula" class="btn btn-success">Salvar</button>
+        <button type="submit" id="bt-editar-aula" class="btn btn-success">Salvar</button>
     </div>
 </div>
 <!-- javascrtipt da Página -->
