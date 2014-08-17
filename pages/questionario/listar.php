@@ -29,7 +29,7 @@ $questionario = Query::pegarQuestionarios($_SESSION['user']['id']);
                             <td><?php echo $slide['titulo']; ?></td>
                             <td>
                                 <a href="#/questionario/editar/idQuestionario/<?php echo $slide['idQuestionario'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
-                                <!--<a href="#/slides/cadastrarImg/idSlide/<?php echo $slide['idSlide'];?>" class="ajax"><i class="fa fa-image fa-1x col-lg-1"></i></a>-->
+                                <!--<a href="#/questionario/cadastrarImg/idSlide/<?php echo $slide['idSlide'];?>" class="ajax-relacionar"><i class="fa fa-file-text-o fa-1x col-lg-1"></i></a>-->
                             </td>
                         </tr>
                         <?php
