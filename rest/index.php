@@ -92,7 +92,7 @@ if (isset($_POST['act'])) {
                                                 while ($rowQuestao = mysqli_fetch_assoc($qQuestao)) {
                                                     if ($idQuestao !== $rowQuestao['idQuestao']) {
                                                         $idQuestao = $rowQuestao['idQuestao'];
-                                                        $material['titulo'] = $rowQuestao['q_titulo'];
+                                                        //$material['titulo'] = $rowQuestao['q_titulo'];
                                                         $material['alternativas'] = array();
                                                     }
 
