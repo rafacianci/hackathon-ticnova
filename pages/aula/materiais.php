@@ -34,6 +34,13 @@ require_once '../../query.php';
                             <td><?php echo getTipoMaterial($material['tipo']); ?></td>
                             <td>
                                 <a data-msg="Você realmente deseja exluir este material?" href="#/aula/materiais/tipo/deletarRelacionamento/idAula/<?php echo $material['idAula'];?>/idMaterial/<?php echo $material['idMaterial'];?>/idTipo/<?php echo $material['tipo'];?>" class="ajax-confirm"><i class="fa fa-unlink col-lg-1"></i></a>
+                                <?php 
+                                    if ($material['tipo'] == MATERIAL_QUESTIONARIO) {
+                                       ?> 
+                                <a class="ajax" href="#/aula/respostas/idQuestionario/<?php echo$material['idMaterial']?>/idAula/<?php echo $material['idAula'];?>"><i class="fa fa-list col-lg-1"></i></a> 
+                                           <?php 
+                                    }
+                                 ?>
                             </td>
                         </tr>
                         <?php
