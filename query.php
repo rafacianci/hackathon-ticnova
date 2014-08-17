@@ -64,6 +64,37 @@ class Query {
         return $r;
     }
 
+    public static function pegarQuestionarios($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM questionario
+                                  WHERE idProfessor = {$id}
+                               ORDER BY idQuestionario DESC");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
+    public static function pegarQuestionario($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM questionario
+                                  WHERE idQuestionario = {$id}");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
     public static function pegarRelacionados($idAula, $idTipo) {
         $con = Database::getCon();
 
@@ -89,7 +120,7 @@ class Query {
                       ORDER BY s.idSlide DESC";
                 break;
             case MATERIAL_VIDEO:
-               $sql = "SELECT v.*, v.idVideo id
+                $sql = "SELECT v.*, v.idVideo id
                           FROM video v 
                          WHERE v.idVideo not in (
                                                 SELECT a.idMaterial from aulamaterial a
@@ -111,6 +142,46 @@ class Query {
             }
         }
 
+        return $r;
+    }
+
+    public static function pegarSlides($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
+    public static function pegarSlide($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+        return $r;
+    }
+
+    public static function pegarSlideImg($id ) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM slideimg WHERE idSlide = {$id}");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
         return $r;
     }
 

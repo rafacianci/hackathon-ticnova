@@ -33,7 +33,7 @@ require_once '../../query.php';
                             <td><?php echo $material['m'.$material['tipo'].'_titulo']; ?></td>
                             <td><?php echo getTipoMaterial($material['tipo']); ?></td>
                             <td>
-                                <a data-msg="Você realmente deseja exluir este material?" href="#/aula/materiais/tipo/deletarRelacionamento/idAula/<?php echo $material['idAula'];?>/idMaterial/<?php echo $material['idMaterial'];?>/idTipo/<?php echo $material['tipo'];?>" class="ajax-confirm"><i class="fa fa-unlink col-lg-1"></i></a>
+                                <a data-msg="Você realmente deseja exluir este material?" href="#/aula/materiais/tipo/deletarRelacionamento/idAula/<?php echo $material['idAula'];?>/idMaterial/<?php echo $material['idMaterial'];?>/idTipo/<?php echo $material['tipo'];?>" class="ajax-confirm"><i class="fa fa-trash-o col-lg-1"></i></a>
                             </td>
                         </tr>
                         <?php

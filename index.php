@@ -101,10 +101,10 @@ require_once './db.php';
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Slides<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#/slides/listar">Listar</a>
+                                        <a class="ajax" href="#/slides/listar">Listar</a>
                                     </li>
                                     <li>
-                                        <a href="#/slides/cadastrar">Cadastrar</a>
+                                        <a class="ajax" href="#/slides/cadastrar">Cadastrar</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
@@ -113,10 +113,10 @@ require_once './db.php';
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Questionários<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#/questionario/listar">Listar</a>
+                                        <a class="ajax" href="#/questionario/listar">Listar</a>
                                     </li>
                                     <li>
-                                        <a href="#/questionario/cadastrar">Cadastrar</a>
+                                        <a class="ajax" href="#/questionario/cadastrar">Cadastrar</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->

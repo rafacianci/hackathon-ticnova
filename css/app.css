@@ -14,3 +14,20 @@ table .ajax-confirm i:hover {
 a.btn{
     top: -7px;
 }
+
+.img .panel-footer{
+    height: 34px;
+}
+
+img{
+    max-width: 100%;
+}
+
+.imgForm{
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.imgTable tr{
+    margin: 15px auto;
+}
