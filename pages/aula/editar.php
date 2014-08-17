@@ -36,7 +36,7 @@ if ($_GET['idAula']) {
         </form>
     </div>
     <div class="panel-footer">
-        <button type="submit" id="bt-editar-aula" class="btn btn-success">Salvar</button>
+        <button type="submit" id="bt-editar-aula" class="btn btn-success" data-type="editarAula">Salvar</button>
     </div>
 </div>
 <!-- javascrtipt da Página -->

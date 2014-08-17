@@ -199,21 +199,15 @@ if (isset($_POST['act'])) {
             }
             break;
         case 'verificaAluno':
-            $params = null;
-            if (isset($_POST['data'])) {
-                if (is_string($_POST['data'])) {
-                    $params = json_decode($_POST['data'], 1);
-                } else {
-                    $params = $_POST['data'];
-                }
+
+            if ((isset($_POST['login'])) && (isset($_POST['senha']))) {
+
+                $login = $_POST['login'];
+                $senha = $_POST['senha'];
 
 
-                $idAluno = (isset($params['login'])) ? (string) $params['login'] : null;
-                $senha = (isset($params['senha'])) ? (string) $params['senha'] : null;
-
-
-                if (null !== $idAluno && null !== $senha) {
-                    $sql = "select * from aluno where login = '$idAluno' and senha = '$senha' ";
+                if (null !== $login && null !== $senha) {
+                    $sql = "select * from aluno where login = '$login' and senha = '$senha' ";
                 }
 
                 $con = Database::getCon();
@@ -227,6 +221,9 @@ if (isset($_POST['act'])) {
                     $retorno["msg_error"] = "Aluno nao encontrado";
                     retorno($retorno);
                 }
+            } else {
+                $retorno["msg_error"] = "Informe login e senha";
+                retorno($retorno);
             }
             break;
         case 'salvarResposta':

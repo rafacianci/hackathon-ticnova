@@ -1,3 +1,7 @@
+body.pace-running #wrapper{
+    opacity: 0.3;
+}
+
 table .ajax i,
 table .ajax-confirm i {
     font-size: 19px;

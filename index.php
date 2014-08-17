@@ -20,6 +20,10 @@ require_once './db.php';
         <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
+        <!-- Bootstrap Core CSS -->
+        <link href="css/pace.css" rel="stylesheet">
+        <script src="js/pace.min.js"></script>
+
         <!-- MetisMenu CSS -->
         <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 

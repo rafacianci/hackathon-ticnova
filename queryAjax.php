@@ -59,6 +59,15 @@ if ($_POST) {
                     "redirect" => "#/videos/listar",
                 ));
                 break;
+            case "relacionarArquivo":
+                $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
+                $idMaterial = (isset($_POST['idMaterial'])) ? $_POST['idMaterial'] : null;
+                $cdTipo = (isset($_POST['idTipo'])) ? $_POST['idTipo'] : null;
+                $q = mysqli_query($con, "INSERT INTO aulamaterial (idAula, idMaterial, tipo) values ('{$idAula}','{$idMaterial}','{$cdTipo}')");
+                echo json_encode(array(
+                    "redirect" => "#/aula/relacionar/cdTipo/".$cdTipo."/idAula/".$idAula,
+                ));
+                break;
             default:
                 break;
         }
