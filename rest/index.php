@@ -190,7 +190,8 @@ if (isset($_POST['act'])) {
                         retorno($retorno);
                     }
                 } else {
-                    retorno($retorno["msg_error"] = "Aluno nao encontrado");
+                    $retorno["msg_error"] = "Aluno nao encontrado";
+                    retorno($retorno);
                 }
             }
             break;
