@@ -1,5 +1,7 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+
 require_once '../config.php';
 require_once '../db.php';
 
@@ -53,6 +55,13 @@ if (isset($_POST['act'])) {
                         );
 
                         switch ($row['tipo']) {
+                            case MATERIAL_QUESTIONARIO:
+//                                $queryQuestionario = "select q.* from questionario s "
+//                                        . "left join slideimg si on (si.idSlide = s.idSlide) "
+//                                        . "where s.idSlide = {$row['idMaterial']} "
+//                                        . "order by si.ordem ASC"
+//                                ;
+                                break;
                             case MATERIAL_SLIDE:
                                 $querySlide = "select s.*, si.* from slide s "
                                         . "left join slideimg si on (si.idSlide = s.idSlide) "
