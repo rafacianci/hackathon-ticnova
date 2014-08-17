@@ -44,5 +44,3 @@ $aulas = Query::pegarAulas($_SESSION['user']['id']);
     </div>
     <!-- /.panel-body -->
 </div>
-<!-- javascrtipt da Página -->
-<script src="js/aula/aula.js"></script>

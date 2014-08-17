@@ -21,7 +21,15 @@ if (isset($_POST['act'])) {
             retorno($retorno);
             break;
         case 'pegarAula':
-            $params = (isset($_POST['data'])) ? json_decode($_POST['data'], 1) : null;
+            $params = null;
+            if (isset($_POST['data'])) {
+                if (is_string($_POST['data'])) {
+                    $params = json_decode($_POST['data'], 1);
+                } else {
+                    $params = $_POST['data'];
+                }
+            }
+            
             $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
 
             if (null !== $chave) {
@@ -34,33 +42,61 @@ if (isset($_POST['act'])) {
                 $con = Database::getCon();
                 $q = mysqli_query($con, $query);
 
-                $r = array();
                 $idAula = null;
                 $idSlide = null;
+                $idQuestionario = null;
+                $idQuestao = null;
 
                 while ($row = mysqli_fetch_assoc($q)) {
                     if ($idAula !== $row['idAula']) {
                         $idAula = $row['idAula'];
-                        $r['idAula'] = $idAula;
-                        $r['data'] = dateView($row['a_data']);
-                        $r['titulo'] = $row['a_titulo'];
-                        $r['idGrupo'] = $row['idGrupo'];
-                        $r['material'] = array();
+                        $retorno['idAula'] = $idAula;
+                        $retorno['data'] = dateView($row['a_data']);
+                        $retorno['titulo'] = $row['a_titulo'];
+                        $retorno['idGrupo'] = $row['idGrupo'];
+                        $retorno['material'] = array();
                     }
 
                     if (null !== $row['idMaterial']) {
-                        $material = array(
-                            'idMaterial' => $row['idMaterial'],
-                            'tipo' => $row['tipo'],
-                        );
-
+                        $material = array();
                         switch ($row['tipo']) {
                             case MATERIAL_QUESTIONARIO:
-//                                $queryQuestionario = "select q.* from questionario s "
-//                                        . "left join slideimg si on (si.idSlide = s.idSlide) "
-//                                        . "where s.idSlide = {$row['idMaterial']} "
-//                                        . "order by si.ordem ASC"
-//                                ;
+                                $status = QUESTIONARIO_ATIVO;
+                                $queryQuestionario = "select q.idQuestionario, q.titulo q_titulo, q2.idQuestao, q2.titulo q2_titulo from questionario q "
+                                        . "left join questao q2 on (q.idQuestionario = q2.idQuestionario) "
+                                        . "where (q.idQuestionario = {$row['idMaterial']}) "
+                                ;
+                                $qQuestionario = mysqli_query($con, $queryQuestionario);
+
+                                if (mysqli_num_rows($qQuestionario)) {
+                                    $material = array(
+                                        'idMaterial' => $row['idMaterial'],
+                                        'tipo' => $row['tipo'],
+                                    );
+
+                                    while ($rowQuestionario = mysqli_fetch_assoc($qQuestionario)) {
+                                        if ($idQuestionario !== $rowQuestionario['idQuestionario']) {
+                                            $idQuestionario = $rowQuestionario['idQuestionario'];
+                                            $material['titulo'] = $rowQuestionario['q_titulo'];
+                                        }
+
+                                        if ($idQuestionario == $rowQuestionario['idQuestionario']) {
+                                            $queryQuestao = "select q.idQuestao, q.titulo q_titulo from questao q "
+//                                                    . "left join questao q2 on (q.idQuestionario = q2.idQuestionario) "
+                                                    . "where (q.idQuestionario = {$idQuestionario}) "
+                                            ;
+                                            $qQuestao = mysqli_query($con, $queryQuestao);
+                                            
+                                            if (mysqli_num_rows($qQuestao)) {
+                                                while ($rowQuestao = mysqli_fetch_assoc($qQuestao)) {
+                                                    if ($idQuestao !== $rowQuestao['idQuestao']) {
+                                                        $idQuestao = $rowQuestao['idQuestao'];
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                                 break;
                             case MATERIAL_SLIDE:
                                 $querySlide = "select s.*, si.* from slide s "
@@ -70,36 +106,52 @@ if (isset($_POST['act'])) {
                                 ;
                                 $qSlide = mysqli_query($con, $querySlide);
 
-                                while ($rowSlide = mysqli_fetch_assoc($qSlide)) {
-                                    if ($idSlide !== $row['idMaterial']) {
-                                        $idSlide = $row['idMaterial'];
-                                        $material['titulo'] = $rowSlide['titulo'];
-                                        $material['imgs'] = array();
-                                    }
-
-                                    $material['imgs'][] = array(
-                                        'img' => $rowSlide['idImg'],
-                                        'ordem' => $rowSlide['ordem'],
-                                        'url' => $rowSlide['url'],
+                                if (mysqli_num_rows($qSlide)) {
+                                    $material = array(
+                                        'idMaterial' => $row['idMaterial'],
+                                        'tipo' => $row['tipo'],
                                     );
+
+                                    while ($rowSlide = mysqli_fetch_assoc($qSlide)) {
+                                        if ($idSlide !== $row['idMaterial']) {
+                                            $idSlide = $row['idMaterial'];
+                                            $material['titulo'] = $rowSlide['titulo'];
+                                            $material['imgs'] = array();
+                                        }
+
+                                        $material['imgs'][] = array(
+                                            'img' => $rowSlide['idImg'],
+                                            'ordem' => $rowSlide['ordem'],
+                                            'url' => $rowSlide['url'],
+                                        );
+                                    }
                                 }
                                 break;
                             case MATERIAL_VIDEO:
                                 $queryVideo = "select v.* from video v where idVideo = {$row['idMaterial']}";
                                 $qVideo = mysqli_query($con, $queryVideo);
-                                $rowVideo = mysqli_fetch_assoc($qVideo);
-                                $material['url'] = $rowVideo['url'];
+
+                                if (mysqli_num_rows($qVideo)) {
+                                    $material = array(
+                                        'idMaterial' => $row['idMaterial'],
+                                        'tipo' => $row['tipo'],
+                                    );
+                                    $rowVideo = mysqli_fetch_assoc($qVideo);
+                                    $material['url'] = $rowVideo['url'];
+                                }
                                 break;
 
                             default:
                                 break;
                         }
 
-                        $r['material'][] = $material;
+                        if (count($material) > 0) {
+                            $retorno['material'][] = $material;
+                        }
                     }
                 }
 
-                retorno($r);
+                retorno($retorno);
             }
             break;
 

@@ -85,10 +85,10 @@ require_once './db.php';
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Videos<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a class="ajax" href="#/videos/listar">Listar</a>
+                                        <a href="#/videos/listar">Listar</a>
                                     </li>
                                     <li>
-                                        <a class="ajax" href="#/videos/cadastrar">Cadastrar</a>
+                                        <a href="#/videos/cadastrar">Cadastrar</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
