@@ -8,19 +8,22 @@ var links = function() {
         ajaxConfirm: function(link) {
             var req = links.getUrl(link);
             $.ajax({
-                url: req.url,
-                data: req.params
+                url: "../queryAjax.php",
+                data: req.params,
+                type: "POST"
             }).success(function(data) {
+                console.log(data);
                 try {
                     data = JSON.parse(data);
                     if (data.error) {
-                        alert(data.error);
+                        console.log(data.error);
                     } else {
-                        alert(data.msg);
-                        window.location.reload();
+                        window.location.hash = data.redirect;
+                        var link = links.getUrl(data.redirect);
+                        links.getPage(link.url, link.params, link.script);
                     }
                 } catch (e) {
-                    alert("Erro: " + data);
+                    alert("Erro: " + e);
                 }
             }).error(function(data) {
                 console.log('error', data);
@@ -36,6 +39,7 @@ var links = function() {
             $(".ajax-confirm").unbind('click').on('click', function(e) {
                 e.preventDefault();
                 var file = $(this).attr('href');
+                var req = links.getUrl(file);
                 var msg = $(this).data('msg');
 
                 if (confirm(msg)) {

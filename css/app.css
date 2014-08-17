@@ -6,3 +6,7 @@ table .ajax-confirm i {
 table .ajax-confirm i:hover {
     color: #000;
 }
+
+a.btn{
+    top: -7px;
+}
