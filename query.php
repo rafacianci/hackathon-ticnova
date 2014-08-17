@@ -32,7 +32,7 @@ class Query {
     
     public static function pegarAulas($id) {
         $con = Database::getCon();
-        $q = mysqli_query($con, "select * from aula where idProfessor = {$id} order by data desc, idAula desc");
+        $q = mysqli_query($con, "select * from aula where idProfessor = {$id} order by data desc");
         $r = array();
         
         if (null !== $q) {
@@ -42,26 +42,6 @@ class Query {
         }
      
         return $r;
-    }
-    
-    public static function pegarVideos($id) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "select * from video where idProfessor = {$id} order by idVideo desc");
-        $r = array();
-        
-        if (null !== $q) {
-            while ($row = mysqli_fetch_assoc($q)) {
-                $r[] = $row;
-            }
-        }
-     
-        return $r;
-    }
-    
-    public static function pegarVideo($id) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "select * from video where idVideo = {$id}");
-        return mysqli_fetch_assoc($q);
     }
     
     public static function salvarAula($id = null, $aula) {

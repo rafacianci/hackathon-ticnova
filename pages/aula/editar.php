@@ -2,6 +2,17 @@
 require_once '../../config.php';
 require_once '../../query.php';
 
+if ($_POST) {
+    $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
+
+    $aula = array(
+        'titulo' => (isset($_POST['titulo'])) ? $_POST['titulo'] : null,
+        'data' => (isset($_POST['data'])) ? $_POST['data'] : null,
+    );
+
+    Query::salvarAula($idAula, $aula);
+}
+
 if ($_GET['idAula']) {
     $aula = Query::pegarAula($_GET['idAula']);
 }
@@ -12,7 +23,7 @@ if ($_GET['idAula']) {
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <form method="POST">
+        <form id="editarAula" method="POST">
             <input id="idAula" name="idAula" type="hidden" value="<?php echo $_REQUEST['idAula']; ?>" >
             <div class="form-group col-lg-2">
                 <label>Data</label>
@@ -25,7 +36,7 @@ if ($_GET['idAula']) {
         </form>
     </div>
     <div class="panel-footer">
-        <button type="submit" id="bt-editar-aula" data-type="editarAula" class="btn btn-success">Salvar</button>
+        <button type="submit" id="bt-editar-aula" class="btn btn-success">Salvar</button>
     </div>
 </div>
 <!-- javascrtipt da Página -->
