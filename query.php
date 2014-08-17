@@ -32,7 +32,7 @@ class Query {
     
     public static function pegarAulas($id) {
         $con = Database::getCon();
-        $q = mysqli_query($con, "select * from aula where idProfessor = {$id} order by data desc");
+        $q = mysqli_query($con, "select * from aula where idProfessor = {$id} order by data desc, idAula desc");
         $r = array();
         
         if (null !== $q) {

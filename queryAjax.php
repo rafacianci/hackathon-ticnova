@@ -19,6 +19,16 @@ if ($_POST) {
                     "redirect" => "#/aula/listar",
                 ));
                 break;
+            case "cadastrarAula":
+                $data = (isset($_POST['data'])) ? $_POST['data'] : null;
+                $data = dateDb($data);
+                $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
+                $idProf = $_SESSION['user']['id'];
+                $q = mysqli_query($con, "INSERT INTO aula (data, titulo, idProfessor) values ('{$data}','{$titulo}','{$idProf}')");
+                echo json_encode(array(
+                    "redirect" => "#/aula/listar",
+                ));
+                break;
 
             default:
                 break;
