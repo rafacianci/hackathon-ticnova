@@ -17,20 +17,3 @@ function dateView($data){
 function dateDb($data){
     return join("-", array_reverse(explode("/", $data)));
 }
-
-function getTipoMaterial($id){
-    switch ($id) {
-        case MATERIAL_QUESTIONARIO:
-            return "Questionário";
-            break;
-        case MATERIAL_SLIDE:
-            return "Slide";
-            break;
-        case MATERIAL_VIDEO:
-            return "Vídeo";
-            break;
-        default:
-            break;
-    }
-    
-}

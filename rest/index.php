@@ -1,6 +1,7 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
+header('Content-Type: text/html; charset=utf-8');
 
 require_once '../config.php';
 require_once '../db.php';
@@ -29,7 +30,7 @@ if (isset($_POST['act'])) {
                     $params = $_POST['data'];
                 }
             }
-            
+
             $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
 
             if (null !== $chave) {
@@ -76,21 +77,30 @@ if (isset($_POST['act'])) {
                                     while ($rowQuestionario = mysqli_fetch_assoc($qQuestionario)) {
                                         if ($idQuestionario !== $rowQuestionario['idQuestionario']) {
                                             $idQuestionario = $rowQuestionario['idQuestionario'];
-                                            $material['titulo'] = $rowQuestionario['q_titulo'];
+                                            $material['titulo'] = "Questionario " . $idQuestionario;
+                                            $material['pergunta'] = $rowQuestionario['q_titulo'];
                                         }
 
                                         if ($idQuestionario == $rowQuestionario['idQuestionario']) {
-                                            $queryQuestao = "select q.idQuestao, q.titulo q_titulo from questao q "
-//                                                    . "left join questao q2 on (q.idQuestionario = q2.idQuestionario) "
+                                            $queryQuestao = "select q.idQuestao, q.titulo q_titulo, a.* from questao q "
+                                                    . "left join alternativa a on (a.idQuestao = q.idQuestao) "
                                                     . "where (q.idQuestionario = {$idQuestionario}) "
                                             ;
                                             $qQuestao = mysqli_query($con, $queryQuestao);
-                                            
+
                                             if (mysqli_num_rows($qQuestao)) {
                                                 while ($rowQuestao = mysqli_fetch_assoc($qQuestao)) {
                                                     if ($idQuestao !== $rowQuestao['idQuestao']) {
                                                         $idQuestao = $rowQuestao['idQuestao'];
+                                                        $material['pergunta'] = $rowQuestao['q_titulo'];
+                                                        $material['alternativas'] = array();
                                                     }
+
+                                                    $material['alternativas'][] = array(
+                                                        'alternativa' => $rowQuestao['idAlternativa'],
+                                                        'titulo' => $rowQuestao['titulo'],
+                                                        'correta' => $rowQuestao['correta'],
+                                                    );
                                                 }
                                             }
                                         }
@@ -154,7 +164,37 @@ if (isset($_POST['act'])) {
                 retorno($retorno);
             }
             break;
+        case 'verificaAluno':
+            $params = null;
+            if (isset($_POST['data'])) {
+                if (is_string($_POST['data'])) {
+                    $params = json_decode($_POST['data'], 1);
+                } else {
+                    $params = $_POST['data'];
+                }
 
+
+                $login = (isset($params['login'])) ? (string) $params['login'] : null;
+                $senha = (isset($params['senha'])) ? (string) $params['senha'] : null;
+
+
+                if (null !== $login && null !== $senha) {
+                    $sql = "select * from aluno where login = '$login' and senha = '$senha' ";
+                }
+
+                $con = Database::getCon();
+                $q = mysqli_query($con, $sql);
+                if (mysqli_num_rows($q)) {
+                    while ($row = mysqli_fetch_assoc($q)) {
+                        $retorno = array_merge($row, $retorno);
+                        retorno($retorno);
+                    }
+                } else {
+                    $retorno["msg_error"] = "Aluno nao encontrado";
+                    retorno($retorno);
+                }
+            }
+            break;
         default:
             break;
     }

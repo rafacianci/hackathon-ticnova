@@ -1,8 +1,3 @@
-//$(function() {
-//    aulas.init();
-//
-//});
-
 var aula = function() {
     return {
         init: function() {
@@ -10,10 +5,10 @@ var aula = function() {
         },
         click: function() {
             $("#bt-editar-aula").on("click", function() {
-                var fd = new FormData();
-                fd.append("idAula", $("#idAula").val());
-                fd.append("data", $("#data").val());
-                fd.append("titulo", $("#titulo").val());
+        var fd = new FormData();
+        fd.append("idAula", $("#idAula").val());
+        fd.append("data", $("#data").val());
+        fd.append("titulo", $("#titulo").val());
                 fd.append("tipo", $(this).attr("data-type"));
                 aula.ajaxContent(fd);
             });
@@ -30,26 +25,26 @@ var aula = function() {
 
         },
         ajaxContent: function(fd) {
-            $.ajax({
-                url: "/queryAjax.php",
-                data: fd,
-                type: "POST",
-                processData: false, // tell jQuery not to process the data
-                contentType: false   // tell jQuery not to set contentType
-            }).success(function(msg) {
-                try {
-                    data = JSON.parse(msg);
+        $.ajax({
+            url: "/queryAjax.php",
+            data: fd,
+            type: "POST",
+            processData: false, // tell jQuery not to process the data
+            contentType: false   // tell jQuery not to set contentType
+        }).success(function(msg) {
+            try {
+                data = JSON.parse(msg);
                     if (data.redirect) {
-                        window.location.hash = data.redirect;
-                        var link = links.getUrl(data.redirect);
+                    window.location.hash = data.redirect;
+                    var link = links.getUrl(data.redirect);
                         links.getPage(link.url, link.params, link.script);
-                    }
-                } catch (e) {
-                    alert("Erro: " + data);
                 }
-            }).error(function(e) {
-                console.log("erro:" + e);
-            });
+            } catch (e) {
+                alert("Erro: " + data);
+            }
+        }).error(function(e) {
+            console.log("erro:" + e);
+});
         }
     };
 }();
