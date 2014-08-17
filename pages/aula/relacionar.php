@@ -2,16 +2,16 @@
 require_once '../../config.php';
 require_once '../../query.php';
 
-    $materiais = Query::pegarMateriais($_GET['idAula']);
+    $relacionar = Query::pegarRelacionados($_GET['idAula']);
         
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
         Materiais
         <div class="col-lg-6 pull-right">
-            <a href="#/aula/relacionar/cdTipo/1/idAula/<?php echo $_REQUEST['idAula']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Questionário</a>
-            <a href="#/aula/relacionar/cdTipo/2/idAula/<?php echo $_REQUEST['idAula']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Slide</a>
-            <a href="#/aula/relacionar/cdTipo/3/idAula/<?php echo $_REQUEST['idAula']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Vídeos</a>
+            <a href="#" class="btn btn-default col-lg-3 col-lg-offset-1">+ Questionário</a>
+            <a href="#" class="btn btn-default col-lg-3 col-lg-offset-1">+ Slide</a>
+            <a href="#" class="btn btn-default col-lg-3 col-lg-offset-1">+ Vídeos</a>
         </div>
     </div>
     <!-- /.panel-heading -->
