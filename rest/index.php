@@ -77,7 +77,8 @@ if (isset($_POST['act'])) {
                                     while ($rowQuestionario = mysqli_fetch_assoc($qQuestionario)) {
                                         if ($idQuestionario !== $rowQuestionario['idQuestionario']) {
                                             $idQuestionario = $rowQuestionario['idQuestionario'];
-                                            $material['titulo'] = $rowQuestionario['q_titulo'];
+                                            $material['titulo'] = "Questionario " . $idQuestionario;
+                                            $material['pergunta'] = $rowQuestionario['q_titulo'];
                                         }
 
                                         if ($idQuestionario == $rowQuestionario['idQuestionario']) {
