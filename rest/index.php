@@ -1,7 +1,6 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
 
 require_once '../config.php';
 require_once '../db.php';
@@ -22,7 +21,15 @@ if (isset($_POST['act'])) {
             retorno($retorno);
             break;
         case 'pegarAula':
-            $params = (isset($_POST['data'])) ? json_decode($_POST['data'], 1) : null;
+            $params = null;
+            if (isset($_POST['data'])) {
+                if (is_string($_POST['data'])) {
+                    $params = json_decode($_POST['data'], 1);
+                } else {
+                    die($_POST['data']);
+                }
+            }
+            
             $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
 
             if (null !== $chave) {
