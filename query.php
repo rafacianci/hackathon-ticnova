@@ -1,6 +1,6 @@
 <?php
 
-require_once '/db.php';
+require_once '../../db.php';
 class Query {
     
     public static function login($login, $senha) {
@@ -55,18 +55,10 @@ class Query {
         }else{
             $data = dateDb($aula['data']);
             $titulo = $aula['titulo'];
-            $q = mysqli_query($con, "UPDATE aula SET ");
+            $q = mysqli_query($con, "UPDATE aula SET (data = '{$data}', titulo = '{$titulo}') WHERE idAula = {$id}");
         }
-        $q = mysqli_query($con, "select * from aula where idProfessor = {$id} order by data desc");
-        $r = array();
-        
-        if (null !== $q) {
-            while ($row = mysqli_fetch_assoc($q)) {
-                $r[] = $row;
-            }
-        }
-     
-        return $r;
+    
+        return $q;
     }
 
 }
