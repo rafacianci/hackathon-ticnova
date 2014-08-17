@@ -25,6 +25,8 @@ var aula = function() {
                 fd.append("tipo", $(this).attr("data-type"));
                 aula.ajaxContent(fd);
             });
+            
+            
 
         },
         ajaxContent: function(fd) {

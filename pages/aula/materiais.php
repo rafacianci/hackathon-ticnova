@@ -2,12 +2,17 @@
 require_once '../../config.php';
 require_once '../../query.php';
 
-$aulas = Query::pegarAulas($_SESSION['user']['id']);
-
+    $materiais = Query::pegarMateriais($_GET['idAula']);
+        
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        Aulas
+        Materiais
+        <div class="col-lg-6 pull-right">
+            <a href="#" class="btn-default col-lg-4">+ Questionário</a>
+            <a href="#" class="btn-default col-lg-4">+ Slide</a>
+            <a href="#" class="btn-default col-lg-4">+ Vídeos</a>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
@@ -15,23 +20,20 @@ $aulas = Query::pegarAulas($_SESSION['user']['id']);
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Data</th>
                         <th>Título</th>
+                        <th>Tipo</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($aulas as $aula) {
+                    foreach ($materiais as $material) {
                         ?>
                         <tr>
-                            <td><?php echo $aula['idAula']; ?></td>
-                            <td><?php echo dateView($aula['data']); ?></td>
-                            <td><?php echo $aula['titulo']; ?></td>
+                            <td><?php echo $material['m'.$material['tipo'].'_titulo']; ?></td>
+                            <td><?php echo getTipoMaterial($material['tipo']); ?></td>
                             <td>
-                                <a href="#/aula/materiais/idAula/<?php echo $aula['idAula'];?>" class="ajax-modal"><i class="fa fa-paperclip fa-1x col-lg-1"></i></a>
-                                <a href="#/aula/editar/idAula/<?php echo $aula['idAula'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
+                                <a href="#/aula/materiais/idAula/<?php echo $aula['idAula'];?>" class="ajax-modal"><i class="fa fa-unlink col-lg-1"></i></a>
                             </td>
                         </tr>
                         <?php

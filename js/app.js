@@ -59,7 +59,6 @@ var links = function() {
             }).success(function(data) {
                 $("#content").html(data);
                 links.click();
-                console.log(script);
                 window[script].init();
             }).error(function(data) {
                 console.log('error');
