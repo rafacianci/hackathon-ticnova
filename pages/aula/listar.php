@@ -30,7 +30,7 @@ $aulas = Query::pegarAulas($_SESSION['user']['id']);
                             <td><?php echo dateView($aula['data']); ?></td>
                             <td><?php echo $aula['titulo']; ?></td>
                             <td>
-                                <a href="#/aula/materiais/idAula/<?php echo $aula['idAula'];?>" class="ajax-modal"><i class="fa fa-paperclip fa-1x col-lg-1"></i></a>
+                                <a href="#/aula/materiais/idAula/<?php echo $aula['idAula'];?>" class="ajax"><i class="fa fa-paperclip fa-1x col-lg-1"></i></a>
                                 <a href="#/aula/editar/idAula/<?php echo $aula['idAula'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
                             </td>
                         </tr>

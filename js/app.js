@@ -30,7 +30,7 @@ var links = function() {
             $(".ajax").unbind('click').on('click', function() {
                 var file = $(this).attr('href');
                 var req = links.getUrl(file);
-                links.getPage(req.url, req.params, req.script);
+                links.getPage(req.url, req.params);
             });
 
             $(".ajax-confirm").unbind('click').on('click', function(e) {
@@ -50,16 +50,15 @@ var links = function() {
         load: function() {
             var link = window.location.hash.split('#')[1];
             var req = links.getUrl(link);
-            links.getPage(req.url, req.params, req.script);
+            links.getPage(req.url, req.params);
         },
-        getPage: function(file, data, script) {
+        getPage: function(file, data) {
             $.ajax({
                 url: file,
                 data: data,
             }).success(function(data) {
                 $("#content").html(data);
                 links.click();
-                window[script].init();
             }).error(function(data) {
                 console.log('error');
             });
@@ -84,7 +83,7 @@ var links = function() {
                 params[k] = v;
             }
 
-            return {url: url, params: params, script: link[1]};
+            return {url: url, params: params};
         }
     };
 }();

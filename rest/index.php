@@ -1,6 +1,7 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
+header('Content-Type: text/html; charset=utf-8');
 
 require_once '../config.php';
 require_once '../db.php';
@@ -29,7 +30,7 @@ if (isset($_POST['act'])) {
                     $params = $_POST['data'];
                 }
             }
-            
+
             $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
 
             if (null !== $chave) {
@@ -80,17 +81,25 @@ if (isset($_POST['act'])) {
                                         }
 
                                         if ($idQuestionario == $rowQuestionario['idQuestionario']) {
-                                            $queryQuestao = "select q.idQuestao, q.titulo q_titulo from questao q "
-//                                                    . "left join questao q2 on (q.idQuestionario = q2.idQuestionario) "
+                                            $queryQuestao = "select q.idQuestao, q.titulo q_titulo, a.* from questao q "
+                                                    . "left join alternativa a on (a.idQuestao = q.idQuestao) "
                                                     . "where (q.idQuestionario = {$idQuestionario}) "
                                             ;
                                             $qQuestao = mysqli_query($con, $queryQuestao);
-                                            
+
                                             if (mysqli_num_rows($qQuestao)) {
                                                 while ($rowQuestao = mysqli_fetch_assoc($qQuestao)) {
                                                     if ($idQuestao !== $rowQuestao['idQuestao']) {
                                                         $idQuestao = $rowQuestao['idQuestao'];
+                                                        $material['titulo'] = $rowQuestao['q_titulo'];
+                                                        $material['alternativas'] = array();
                                                     }
+
+                                                    $material['alternativas'][] = array(
+                                                        'alternativa' => $rowQuestao['idAlternativa'],
+                                                        'titulo' => $rowQuestao['titulo'],
+                                                        'correta' => $rowQuestao['correta'],
+                                                    );
                                                 }
                                             }
                                         }
