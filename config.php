@@ -14,5 +14,5 @@ function dateView($data){
 }
 
 function dateDb($data){
-    return strtotime(join("-", array_reverse(explode("/", $data))));
+    return join("-", array_reverse(explode("/", $data)));
 }
