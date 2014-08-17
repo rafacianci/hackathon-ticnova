@@ -96,8 +96,35 @@ var links = function() {
                 v = link[i];
                 params[k] = v;
             }
-
+            
             return {url: url, params: params, script: link[1]};
+        },
+        verificaLogin: function() {
+            $.ajax({
+                url: "../queryAjax.php",
+                type: "POST"
+            }).success(function(data) {
+                console.log(data);
+                try {
+                    data = JSON.parse(data);
+                    if (data.error) {
+                        console.log(data.error);
+                    } else {
+
+                        window.location.hash = data.redirect;
+
+                        // var link = links.getUrl(data.redirect);
+                        //window.location
+                        //links.getPage(link.url, link.params, link.script);
+                    }
+                } catch (e) {
+                    alert("Erro: " + e);
+                }
+            }).error(function(data) {
+                console.log('error', data);
+            });
         }
+
+        
     };
 }();

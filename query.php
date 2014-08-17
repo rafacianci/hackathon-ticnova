@@ -222,4 +222,33 @@ class Query {
         return $q;
     }
 
+    public static function pegarRespostas($idQuestionario, $idAula) {
+        $con = Database::getCon();
+
+        $queryAluno = "select * from aluno";
+        $qAluno = mysqli_query($con, $queryAluno);
+
+        $alunos = array();
+        if (mysqli_num_rows($qAluno)) {
+            while ($row = mysqli_fetch_assoc($qAluno)) {
+                $alunos[] = $row;
+            }
+        }
+
+        $queryResposta = "select r.*, a.*, a.titulo a_titulo, q.*, q.titulo q_titulo, ac.titulo ac_titulo from resposta r "
+                . "left join alternativa a on(a.idAlternativa = r.idAlternativa) "
+                . "left join alternativa ac on(ac.idAlternativa = a.idAlternativa) and (ac.correta = 1)"
+                . "left join questao q on(q.idQuestao = a.idQuestao)";
+        $qResposta = mysqli_query($con, $queryResposta);
+
+        $respostas = array();
+        if (mysqli_num_rows($qResposta)) {
+            while ($row = mysqli_fetch_assoc($qResposta)) {
+                $respostas[] = $row;
+            }
+        }
+
+        return array('alunos' => $alunos, 'respostas' => $respostas);
+    }
+
 }
