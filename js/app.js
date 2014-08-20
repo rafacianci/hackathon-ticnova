@@ -12,7 +12,6 @@ var links = function() {
                 data: req.params,
                 type: "POST"
             }).success(function(data) {
-                console.log(data);
                 try {
                     data = JSON.parse(data);
                     if (data.error) {

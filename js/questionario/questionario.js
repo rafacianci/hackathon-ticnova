@@ -19,6 +19,17 @@ var questionario = function() {
                 questionario.ajaxContent(fd);
             });
 
+            $("#bt-editar-questao").on("click", function() {
+                var fd = new FormData();
+                fd.append("idQuestao", $("#idQuestao").val());
+                fd.append("titulo", $("#titulo").val());
+                fd.append($("#alternativa-correta").attr('data-id'), $("#alternativa-correta").val());
+                fd.append($("#alternativa-incorreta1").attr('data-id'), $("#alternativa-incorreta1").val());
+                fd.append($("#alternativa-incorreta2").attr('data-id'), $("#alternativa-incorreta2").val());
+                fd.append("tipo", $(this).attr("data-type"));
+                questionario.ajaxContent(fd);
+            });
+
         },
         ajaxContent: function(fd) {
             $.ajax({

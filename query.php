@@ -23,6 +23,25 @@ class Query {
         }
     }
 
+    public static function pegarAlternativa($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select a.*, q.titulo q_titulo "
+                                . "from alternativa a "
+                           . "left join questao q "
+                                  . "on a.idQuestao = q.idQuestao "
+                               . "where a.idQuestao = {$id} "
+                            . "order by a.correta desc");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
     public static function pegarAula($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "select * from aula where idAula = {$id}");
@@ -64,6 +83,14 @@ class Query {
         return $r;
     }
 
+    public static function pegarQuestionario($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM questionario
+                                  WHERE idQuestionario = {$id}");
+                                  
+        return mysqli_fetch_assoc($q);
+    }
+
     public static function pegarQuestionarios($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "SELECT * FROM questionario
@@ -76,14 +103,17 @@ class Query {
                 $r[] = $row;
             }
         }
-
         return $r;
     }
 
-    public static function pegarQuestionario($id) {
+    public static function pegarQuestao($id) {
         $con = Database::getCon();
-        $q = mysqli_query($con, "SELECT * FROM questionario
-                                  WHERE idQuestionario = {$id}");
+        $q = mysqli_query($con, "SELECT a.*, q.titulo q_titulo
+                                   FROM alternativa a
+                              LEFT JOIN questao q
+                                     ON a.idQuestao = q.idQuestao
+                                  WHERE idQuestao = {$id}
+                               ORDER BY idQuestao");
         $r = array();
 
         if (null !== $q) {
@@ -91,7 +121,21 @@ class Query {
                 $r[] = $row;
             }
         }
+        return $r;
+    }
 
+    public static function pegarQuestoes($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM questao
+                                  WHERE idQuestionario = {$id}
+                               ORDER BY idQuestao DESC");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
         return $r;
     }
 
@@ -145,76 +189,6 @@ class Query {
         return $r;
     }
 
-    public static function pegarSlides($id) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
-        $r = array();
-
-        if (null !== $q) {
-            while ($row = mysqli_fetch_assoc($q)) {
-                $r[] = $row;
-            }
-        }
-
-        return $r;
-    }
-
-    public static function pegarSlide($id) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
-        return mysqli_fetch_assoc($q);
-    }
-
-    public static function pegarSlideImg($id ) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "SELECT * FROM slideimg WHERE idSlide = {$id}");
-        $r = array();
-
-        if (null !== $q) {
-            while ($row = mysqli_fetch_assoc($q)) {
-                $r[] = $row;
-            }
-        }
-        return $r;
-    }
-
-    public static function pegarVideos($id) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "select * from video where idProfessor = {$id} order by idVideo desc");
-        $r = array();
-
-        if (null !== $q) {
-            while ($row = mysqli_fetch_assoc($q)) {
-                $r[] = $row;
-            }
-        }
-
-        return $r;
-    }
-
-    public static function pegarVideo($id) {
-        $con = Database::getCon();
-        $q = mysqli_query($con, "select * from video where idVideo = {$id}");
-        return mysqli_fetch_assoc($q);
-    }
-
-    public static function salvarAula($id = null, $aula) {
-        $con = Database::getCon();
-
-        if (null == $id) {
-            $data = dateDb($aula['data']);
-            $titulo = $aula['titulo'];
-            $q = mysqli_query($con, "INSERT INTO aula (data, titulo) VALUES('{$data}', '{$titulo}' )");
-//            header("");
-        } else {
-            $data = dateDb($aula['data']);
-            $titulo = $aula['titulo'];
-            $q = mysqli_query($con, "UPDATE aula SET (data = '{$data}', titulo = '{$titulo}') WHERE idAula = {$id}");
-        }
-
-        return $q;
-    }
-
     public static function pegarRespostas($idQuestionario, $idAula) {
         $con = Database::getCon();
 
@@ -245,4 +219,71 @@ class Query {
         return array('alunos' => $alunos, 'respostas' => $respostas);
     }
 
+    public static function pegarSlide($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
+        return mysqli_fetch_assoc($q);
+    }
+
+    public static function pegarSlides($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
+    public static function pegarSlideImg($id ) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM slideimg WHERE idSlide = {$id}");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+        return $r;
+    }
+
+    public static function pegarVideo($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select * from video where idVideo = {$id}");
+        return mysqli_fetch_assoc($q);
+    }
+
+    public static function pegarVideos($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select * from video where idProfessor = {$id} order by idVideo desc");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+        return $r;
+    }
+
+    public static function salvarAula($id = null, $aula) {
+        $con = Database::getCon();
+
+        if (null == $id) {
+            $data = dateDb($aula['data']);
+            $titulo = $aula['titulo'];
+            $q = mysqli_query($con, "INSERT INTO aula (data, titulo) VALUES('{$data}', '{$titulo}' )");
+        } else {
+            $data = dateDb($aula['data']);
+            $titulo = $aula['titulo'];
+            $q = mysqli_query($con, "UPDATE aula SET (data = '{$data}', titulo = '{$titulo}') WHERE idAula = {$id}");
+        }
+
+        return $q;
+    }
 }

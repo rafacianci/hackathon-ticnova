@@ -2,17 +2,19 @@
 require_once '../../config.php';
 require_once '../../query.php';
 
-$questionario = Query::pegarQuestionarios($_SESSION['user']['id']);
-
+$questoes = Query::pegarQuestao($_GET['idQuestao']);
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        Questionários
+        Questionário - Questões
+        <div class="col-lg-6 pull-right">
+            <a href="#/questionario/relacionar/questao/<?php echo $_REQUEST['idQuestionario']; ?>" class="ajax btn btn-default col-lg-3 pull-right">+ Questões</a>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
+            <table class="table table-bordered table-hover imgTable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -22,14 +24,13 @@ $questionario = Query::pegarQuestionarios($_SESSION['user']['id']);
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($questionario as $slide) {
+                    foreach ($questoes as $questao) {
                         ?>
                         <tr>
-                            <td><?php echo $slide['idQuestionario']; ?></td>
-                            <td><?php echo $slide['titulo']; ?></td>
+                            <td><?php echo $questao['idQuestao']; ?></td>
+                            <td><?php echo $questao['titulo']; ?></td>
                             <td>
-                                <a href="#/questionario/questoes/idQuestionario/<?php echo $slide['idQuestionario'];?>" class="ajax"><i class="fa fa-paperclip fa-1x col-lg-1"></i></a>
-                                <a href="#/questionario/editar/idQuestionario/<?php echo $slide['idQuestionario'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
+                                <a href="#/questionario/questoes/tipo/deletarQuestao/idQuestao/<?php echo $questao['idQuestao'];?>" class="ajax-confirm"><i class="fa fa-unlink fa-1x col-lg-1"></i></a>
                             </td>
                         </tr>
                         <?php
