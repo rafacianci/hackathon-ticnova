@@ -162,14 +162,7 @@ class Query {
     public static function pegarSlide($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "SELECT * FROM slide WHERE idProfessor = {$id}");
-        $r = array();
-
-        if (null !== $q) {
-            while ($row = mysqli_fetch_assoc($q)) {
-                $r[] = $row;
-            }
-        }
-        return $r;
+        return mysqli_fetch_assoc($q);
     }
 
     public static function pegarSlideImg($id ) {
@@ -235,19 +228,20 @@ class Query {
             }
         }
 
-        $queryResposta = "select r.*, a.*, a.titulo a_titulo, q.*, q.titulo q_titulo, ac.titulo ac_titulo from resposta r "
+        $queryResposta = "select r.*, a.*, a.titulo a_titulo, a.idAlternativa aluno, q.*, q.titulo q_titulo, ac.titulo ac_titulo, ac.idAlternativa correta "
+                . "from resposta r "
                 . "left join alternativa a on(a.idAlternativa = r.idAlternativa) "
-                . "left join alternativa ac on(ac.idAlternativa = a.idAlternativa) and (ac.correta = 1)"
-                . "left join questao q on(q.idQuestao = a.idQuestao)";
+                . "left join alternativa ac on(ac.idQuestao = a.idQuestao) and (ac.correta = 1)"
+                . "left join questao q on(q.idQuestao = a.idQuestao)"
+                . "order by r.idAluno";
         $qResposta = mysqli_query($con, $queryResposta);
-
+        
         $respostas = array();
         if (mysqli_num_rows($qResposta)) {
             while ($row = mysqli_fetch_assoc($qResposta)) {
                 $respostas[] = $row;
             }
         }
-
         return array('alunos' => $alunos, 'respostas' => $respostas);
     }
 
