@@ -234,12 +234,11 @@ if (isset($_POST['act'])) {
             }
             break;
         case 'salvarResposta':
+
             if ((isset($_POST['idAluno'])) && (isset($_POST['id']))) {
 
                 $idAluno = $_POST['idAluno'];
                 $id = $_POST['id'];
-
-
 
                 if ((null !== $idAluno) and ( null !== $id)) {
                     $con = Database::getCon();
@@ -259,6 +258,30 @@ if (isset($_POST['act'])) {
                 $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
             }
             retorno($retorno);
+            break;
+        case 'cadastrarAluno':
+            if ((isset($_POST['Nome'])) && (isset($_POST['email'])) && (isset($_POST['senha']))) {
+                $nome = (string) trim($_POST['Nome']);
+                $email = (string) trim($_POST['email']);
+                $senha = (string) trim($_POST['senha']);
+
+                if ($nome !== "" && $email !== "" && $senha !== "") {
+                    $sql = "select * from aluno where nome = '$nome' and senha = '$senha' and email = '$email'";
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    $nRowsAluno = mysqli_num_rows($query);
+                    if ($nRowsAluno == 0) {
+                        $sqlInsert = "insert into aluno ( nome,email,senha) values('$nome','$email','$senha')";
+                        $qRespostaInsert = mysqli_query($con, $sqlInsert);
+                        $id = mysqli_insert_id($con);
+                        retorno($id);
+                    } else {
+                        $retorno['msg_error'] = 'Aluno já cadastrado';
+                        retorno($retorno);
+                    }
+                }
+            }
+
             break;
         default:
             break;
