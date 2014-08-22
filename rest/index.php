@@ -266,7 +266,7 @@ if (isset($_POST['act'])) {
                 $senha = (string) trim($_POST['senha']);
 
                 if ($nome !== "" && $email !== "" && $senha !== "") {
-                    $sql = "select * from aluno where nome = '$nome' and senha = '$senha' and email = '$email'";
+                    $sql = "select * from aluno where email = '$email'";
                     $con = Database::getCon();
                     $query = mysqli_query($con, $sql);
                     $nRowsAluno = mysqli_num_rows($query);
@@ -274,9 +274,9 @@ if (isset($_POST['act'])) {
                         $sqlInsert = "insert into aluno ( nome,email,senha) values('$nome','$email','$senha')";
                         $qRespostaInsert = mysqli_query($con, $sqlInsert);
                         $id = mysqli_insert_id($con);
-                        retorno($id);
+                        retorno(array('idAluno'=>$id));
                     } else {
-                        $retorno['msg_error'] = 'Aluno já cadastrado';
+                        $retorno['msg_error'] = 'Email já cadastrado';
                         retorno($retorno);
                     }
                 }
