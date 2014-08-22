@@ -1,6 +1,5 @@
 $(function() {
     links.init();
-
 });
 
 var links = function() {

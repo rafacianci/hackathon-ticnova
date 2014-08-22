@@ -44,6 +44,27 @@ if ($_POST) {
                     "redirect" => "#/videos/listar",
                 ));
                 break;
+            case "cadastrarQuestao":
+                $idQuest = (isset($_POST['idQuestionario'])) ? $_POST['idQuestionario'] : null;
+                $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
+                $idCorreta = (isset($_POST['correta'])) ? $_POST['correta'] : null;
+                
+                $q = mysqli_query($con, "INSERT INTO questao (titulo, idQuestionario) VALUES ('{$titulo}', {$idQuest})");
+                $q = mysqli_insert_id($con);
+                unset($_POST['idQuestionario'], $_POST['titulo'],$_POST['correta'],$_POST['tipo']);
+                
+                $i = 1;
+                foreach ($_POST as $key => $value) {
+                    $c = (int) ($i == $idCorreta);
+                    mysqli_query($con, "INSERT INTO alternativa (titulo, correta, idQuestao) VALUES ('{$value}', '{$c}', '{$q}')");
+                    $i++;
+                }
+                
+                
+                echo json_encode(array(
+                    "redirect" => "#/questionario/questoes/idQuestionario/".$idQuest,
+                ));
+                break;
             case "cadastrarQuestionario":
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $idProf = $_SESSION['user']['id'];
@@ -85,13 +106,16 @@ if ($_POST) {
             case "editarQuestao":
                 $idQuest = (isset($_POST['idQuestao'])) ? $_POST['idQuestao'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
-                print_r($_POST[2]);
-                exit;
-//                $correta = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
-                $q = mysqli_query($con, "UPDATE questionario SET titulo = '{$titulo}' where idQuestionario = {$idQuest}");
+                $idCorreta = (isset($_POST['correta'])) ? $_POST['correta'] : null;
                 
+                $q = mysqli_query($con, "UPDATE questao SET titulo = '{$titulo}' where idQuestao = {$idQuest}");
+                unset($_POST['idQuestao'], $_POST['titulo'],$_POST['correta'],$_POST['tipo']);
+                foreach ($_POST as $key => $value) {
+                    $c = (int) ($key == $idCorreta);
+                    mysqli_query($con, "UPDATE alternativa SET titulo = '{$value}', correta = $c where idAlternativa = {$key}");
+                }
                 echo json_encode(array(
-                    "redirect" => "#/questionario/editar/idQuestionario/".$idQuest,
+                    "redirect" => "#/questionario/edit-questao/idQuestao/".$idQuest,
                 ));
                 break;
             case "editarQuestionario":

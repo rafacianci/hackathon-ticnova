@@ -8,7 +8,7 @@ $questoes = Query::pegarQuestoes($_GET['idQuestionario']);
     <div class="panel-heading">
         Questionário - Questões
         <div class="col-lg-6 pull-right">
-            <a href="#/questionario/cad-questao" class="ajax btn btn-default col-lg-3 pull-right">+ Questões</a>
+            <a href="#/questionario/cad-questao/idQuestionario/<?php echo $_GET['idQuestionario']; ?>" class="ajax btn btn-default col-lg-3 pull-right">+ Questões</a>
         </div>
     </div>
     <!-- /.panel-heading -->
@@ -30,7 +30,7 @@ $questoes = Query::pegarQuestoes($_GET['idQuestionario']);
                             <td><?php echo $questao['idQuestao']; ?></td>
                             <td><?php echo $questao['titulo']; ?></td>
                             <td>
-                                <a href="#/questionario/edit-questao/idQuestao/<?php echo $questao['idQuestao'];?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
+                                <a href="#/questionario/edit-questao/idQuestao/<?php echo $questao['idQuestao'];?>/idQuestionario/<?php echo $_GET['idQuestionario']; ?>" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
                             </td>
                         </tr>
                         <?php

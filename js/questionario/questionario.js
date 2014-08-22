@@ -12,10 +12,27 @@ var questionario = function() {
                 questionario.ajaxContent(fd);
             });
 
-            $("#bt-cadastrar-questionario").on("click", function() {
+            $("#bt-cadastrar-questao").on("click", function() {
                 var fd = new FormData();
                 fd.append("titulo", $("#titulo").val());
                 fd.append("tipo", $(this).attr("data-type"));
+                questionario.ajaxContent(fd);
+            });
+
+            $("#bt-cadastrar-questionario").on("click", function() {
+                var fd = new FormData();
+                fd.append("titulo", $("#titulo").val());
+                fd.append("correta", [$("#alternativa-correta").attr('data-id'), $("#alternativa-correta").val()]);
+                fd.append("incorreta1", [$("#alternativa-incorreta1").attr('data-id'), $("#alternativa-incorreta1").val()]);
+                fd.append("incorreta2", [$("#alternativa-incorreta2").attr('data-id'), $("#alternativa-incorreta2").val()]);
+                fd.append("tipo", $(this).attr("data-type"));
+                questionario.ajaxContent(fd);
+            });
+
+            $("#cadQuestao").on("submit", function(e) {
+                e.preventDefault();
+                var fd = new FormData($(this)[0]);
+                fd.append("tipo", "cadastrarQuestao");
                 questionario.ajaxContent(fd);
             });
 
@@ -23,9 +40,10 @@ var questionario = function() {
                 var fd = new FormData();
                 fd.append("idQuestao", $("#idQuestao").val());
                 fd.append("titulo", $("#titulo").val());
-                fd.append($("#alternativa-correta").attr('data-id'), $("#alternativa-correta").val());
-                fd.append($("#alternativa-incorreta1").attr('data-id'), $("#alternativa-incorreta1").val());
-                fd.append($("#alternativa-incorreta2").attr('data-id'), $("#alternativa-incorreta2").val());
+                fd.append($("#alternativa1").attr("data-id"), $("#alternativa1").val());
+                fd.append($("#alternativa2").attr("data-id"), $("#alternativa2").val());
+                fd.append($("#alternativa3").attr("data-id"), $("#alternativa3").val());
+                fd.append("correta", $("#correta:checked").val());
                 fd.append("tipo", $(this).attr("data-type"));
                 questionario.ajaxContent(fd);
             });

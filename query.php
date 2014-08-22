@@ -29,8 +29,7 @@ class Query {
                                 . "from alternativa a "
                            . "left join questao q "
                                   . "on a.idQuestao = q.idQuestao "
-                               . "where a.idQuestao = {$id} "
-                            . "order by a.correta desc");
+                               . "where a.idQuestao = {$id} ");
         $r = array();
 
         if (null !== $q) {
