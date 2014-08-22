@@ -10,7 +10,7 @@ require_once '../../query.php';
     <!-- /.panel-heading -->
     <div class="panel-body">
         <form method="POST">
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-12">
                 <label>Título</label>
                 <input id="titulo" name="titulo" class="form-control" type="text" value="">
             </div>

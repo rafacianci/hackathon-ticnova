@@ -26,7 +26,7 @@ $dados = Query::pegarRespostas($_GET['idQuestionario'], $_GET['idAula']);
                         foreach ($dados['respostas'] as $resposta) {
                             if ($resposta['idAluno'] == $aluno['idAluno']) {
                                 ?>
-                                <tr>
+                                <tr class="<?php echo ($resposta['aluno'] != $resposta['correta']) ? 'danger' : 'success'; ?>">
                                     <td><?php echo $aluno['nome']; ?></td>
                                     <td><?php echo $resposta['q_titulo']; ?></td>
                                     <td><?php echo $resposta['a_titulo']; ?></td>
