@@ -1,6 +1,5 @@
 $(function() {
     links.init();
-
 });
 
 var links = function() {
@@ -60,7 +59,20 @@ var links = function() {
             links.load();
         },
         load: function() {
-            var link = window.location.hash.split('#')[1];
+            var link, hash = window.location.hash;
+            switch (hash) {
+                case "":
+                case "#/":
+                    link = "/main/home";
+                    window.location.hash = '#/' + link;
+                    break;
+                default :
+                    link = window.location.hash.split('#')[1];
+                    break;
+            }
+
+            links.verificaLogin();
+
             var req = links.getUrl(link);
             links.getPage(req.url, req.params, req.script);
         },
@@ -95,35 +107,29 @@ var links = function() {
                 v = link[i];
                 params[k] = v;
             }
-            
+
             return {url: url, params: params, script: link[1]};
         },
         verificaLogin: function() {
             $.ajax({
                 url: "../queryAjax.php",
-                type: "POST"
+                type: "POST",
+                data: {tipo: "verificaLogin"}
             }).success(function(data) {
-                console.log(data);
-                try {
-                    data = JSON.parse(data);
-                    if (data.error) {
-                        console.log(data.error);
-                    } else {
-
-                        window.location.hash = data.redirect;
-
-                        // var link = links.getUrl(data.redirect);
-                        //window.location
-                        //links.getPage(link.url, link.params, link.script);
-                    }
-                } catch (e) {
-                    alert("Erro: " + e);
+                var data = JSON.parse(data);
+                if (data.redirect !== "") {
+                    window.location.hash = data.redirect;
+                    var link = links.getUrl(data.redirect);
+                    links.getPage(link.url, link.params, link.script);
                 }
+                Pace.on('done', function(){
+                    $("#wrapper").show();
+                });
             }).error(function(data) {
                 console.log('error', data);
             });
         }
 
-        
+
     };
 }();

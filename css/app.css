@@ -1,3 +1,7 @@
+#wrapper, .navbar {
+    display: none;
+}
+
 body.pace-running #wrapper{
     opacity: 0.3;
 }

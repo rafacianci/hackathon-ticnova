@@ -71,7 +71,7 @@ require_once './db.php';
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
                             <li>
-                                <a class="active ajax" href="#"><i class="fa fa-dashboard fa-fw"></i> Início</a>
+                                <a class="active ajax" href="#/main/home"><i class="fa fa-dashboard fa-fw"></i> Início</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Aulas<span class="fa arrow"></span></a>
