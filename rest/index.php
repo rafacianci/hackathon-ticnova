@@ -261,7 +261,7 @@ if (isset($_POST['act'])) {
             break;
         case 'cadastrarAluno':
             if ((isset($_POST['Nome'])) && (isset($_POST['email'])) && (isset($_POST['senha']))) {
-                $nome = (string) trim($_POST['Nome']);
+                $nome = (string) trim($_POST['nome']);
                 $email = (string) trim($_POST['email']);
                 $senha = (string) trim($_POST['senha']);
 
