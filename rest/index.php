@@ -207,14 +207,14 @@ if (isset($_POST['act'])) {
             break;
         case 'verificaAluno':
 
-            if ((isset($_POST['login'])) && (isset($_POST['senha']))) {
+            if ((isset($_POST['email'])) && (isset($_POST['senha']))) {
 
-                $login = $_POST['login'];
+                $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
 
-                if (null !== $login && null !== $senha) {
-                    $sql = "select * from aluno where login = '$login' and senha = '$senha' ";
+                if (null !== $email && null !== $senha) {
+                    $sql = "select * from aluno where email = '$email' and senha = '$senha' ";
                 }
 
                 $con = Database::getCon();
@@ -229,7 +229,7 @@ if (isset($_POST['act'])) {
                     retorno($retorno);
                 }
             } else {
-                $retorno["msg_error"] = "Informe login e senha";
+                $retorno["msg_error"] = "Informe email e senha";
                 retorno($retorno);
             }
             break;
