@@ -142,9 +142,15 @@ if ($_POST) {
                     ));
                 } else {
                     echo json_encode(array(
-                        "redirect" => URL_LOGIN,
+                        "redirect" => "",
                     ));
                 }
+                break;
+            case "logout":
+                session_unset();
+                echo json_encode(array(
+                    "redirect" => "#/auth/login",
+                ));
                 break;
             case "relacionarArquivo":
                 $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;

@@ -1,6 +1,20 @@
 $(function() {
     links.init();
+    Pace.on('done', function() {
+        $("#wrapper").show();
+    });
 });
+
+var fnc = function() {
+    return {
+        afterLogin: function() {
+            $("body").removeClass("login");
+        },
+        afterLogout: function() {
+            $("body").addClass("login");
+        }
+    };
+}();
 
 var links = function() {
     return {
@@ -57,6 +71,12 @@ var links = function() {
         init: function() {
             links.click();
             links.load();
+
+            //logout
+            $("#logout").on("click", function(e) {
+                e.preventDefault();
+                links.logout();
+            });
         },
         load: function() {
             var link, hash = window.location.hash;
@@ -110,6 +130,19 @@ var links = function() {
 
             return {url: url, params: params, script: link[1]};
         },
+        logout: function() {
+            $.ajax({
+                url: '../queryAjax.php',
+                data: {tipo: "logout"},
+                type: "post"
+            }).success(function(data) {
+                data = JSON.parse(data);
+                window.location.hash = data.redirect;
+                var link = links.getUrl(data.redirect);
+                links.getPage(link.url, link.params, link.script);
+                fnc.afterLogout();
+            });
+        },
         verificaLogin: function() {
             $.ajax({
                 url: "../queryAjax.php",
@@ -121,15 +154,12 @@ var links = function() {
                     window.location.hash = data.redirect;
                     var link = links.getUrl(data.redirect);
                     links.getPage(link.url, link.params, link.script);
+                } else {
+                    fnc.afterLogin();
                 }
-                Pace.on('done', function(){
-                    $("#wrapper").show();
-                });
             }).error(function(data) {
                 console.log('error', data);
             });
         }
-
-
     };
 }();

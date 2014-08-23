@@ -13,14 +13,14 @@ var auth = function() {
                     processData: false
                 }).success(function(data) {
                     data = JSON.parse(data);
-                    window.location.hash = data.redirect;
-                    var link = links.getUrl(data.redirect);
-                    links.getPage(link.url, link.params, link.script);
+                    if (data.redirect !== "") {
+                        window.location.hash = data.redirect;
+                        var link = links.getUrl(data.redirect);
+                        links.getPage(link.url, link.params, link.script);
+                        fnc.afterLogin();
+                    }
                 });
             });
-        },
-        login: function() {
-
         }
     };
 }();
