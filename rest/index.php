@@ -212,7 +212,6 @@ if (isset($_POST['act'])) {
                 $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
-
                 if (null !== $email && null !== $senha) {
                     $sql = "select * from aluno where email = '$email' and senha = '$senha' ";
                 }
@@ -274,7 +273,7 @@ if (isset($_POST['act'])) {
                         $sqlInsert = "insert into aluno ( nome,email,senha) values('$nome','$email','$senha')";
                         $qRespostaInsert = mysqli_query($con, $sqlInsert);
                         $id = mysqli_insert_id($con);
-                        retorno(array('idAluno'=>$id));
+                        retorno(array('idAluno' => $id));
                     } else {
                         $retorno['msg_error'] = 'Email já cadastrado';
                         retorno($retorno);
@@ -282,6 +281,27 @@ if (isset($_POST['act'])) {
                 }
             }
 
+            break;
+        case 'listarGrupo':
+            if ((isset($_POST['idAluno']))) {
+                $idAluno = (string) trim($_POST['idAluno']);
+                if ($idAluno !== "") {
+                    $sql = "select * from grupo g " .
+                            "inner join grupoaluno ga " .
+                            "on g.idGrupo = ga.idGrupo " .
+                            "inner join professor p " .
+                            "on g.idProfessor = p.idProfessor" .
+                            " where ga.idAluno = $idAluno";
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    if (mysqli_num_rows($query)) {
+                        while ($row = mysqli_fetch_assoc($query)) {
+                            $retorno = array_merge($row, $retorno);
+                            retorno($retorno);
+                        }
+                    }
+                }
+            }
             break;
         default:
             break;
