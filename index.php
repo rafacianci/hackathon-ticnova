@@ -22,7 +22,7 @@ require_once './db.php';
 
         <!-- Bootstrap Core CSS -->
         <link href="css/pace.css" rel="stylesheet">
-        <script src="js/pace.min.js"></script>
+        <script data-pace-options='{"restartOnRequestAfter": 200}' src="js/pace.min.js"></script>
 
         <!-- MetisMenu CSS -->
         <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
