@@ -1,3 +1,13 @@
+#wrapper, 
+body.login .sidebar-nav, 
+body.login .navbar-top-links {
+    display: none;
+}
+
+body.login #page-wrapper{
+    margin: 0;
+}
+
 body.pace-running #wrapper{
     opacity: 0.3;
 }

@@ -4,7 +4,7 @@ ob_start();
 session_start();
 
 define('APP_TITLE', 'TEACH');
-define('URL_LOGIN', '/pages/auth/login.php');
+define('URL_LOGIN', '#/auth/login');
 define('MATERIAL_QUESTIONARIO', 1);
 define('MATERIAL_SLIDE', 2);
 define('MATERIAL_VIDEO', 3);

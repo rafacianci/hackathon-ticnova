@@ -162,6 +162,37 @@ if ($_POST) {
                     "redirect" => "#/slides/cadastrarImg/idSlide/".$idSlide,
                 ));
                 break;
+            case "login":
+                $login = (isset($_POST['login'])) ? $_POST['login'] : null;
+                $senha = (isset($_POST['senha'])) ? md5($_POST['senha']) : null;
+
+                if ((null === $login) or ( null === $senha)) {
+                    throw new Exception('Informe login e senha');
+                }
+
+                $q = mysqli_query($con, "select * from professor where email = '{$login}' and senha = '{$senha}'");
+
+                if (mysqli_num_rows($q) > 0) {
+                    $r = mysqli_fetch_array($q);
+                    $_SESSION['user'] = array(
+                        'id' => $r['idProfessor'],
+                        'nome' => $r['nome'],
+                    );
+                    echo json_encode(array(
+                        "redirect" => "#/main/home",
+                    ));
+                } else {
+                    echo json_encode(array(
+                        "redirect" => "",
+                    ));
+                }
+                break;
+            case "logout":
+                session_unset();
+                echo json_encode(array(
+                    "redirect" => "#/auth/login",
+                ));
+                break;
             case "relacionarArquivo":
                 $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
                 $idMaterial = (isset($_POST['idMaterial'])) ? $_POST['idMaterial'] : null;
@@ -178,6 +209,17 @@ if ($_POST) {
                 echo json_encode(array(
                     "redirect" => "#/grupo/relacionar/idGrupo/".$idGrupo,
                 ));
+                break;
+            case "verificaLogin":
+                if (!isset($_SESSION['user']) and ( $_SERVER['REQUEST_URI'] !== URL_LOGIN)) {
+                    echo json_encode(array(
+                        "redirect" => URL_LOGIN
+                    ));
+                } else {
+                    echo json_encode(array(
+                        "redirect" => ""
+                    ));
+                }
                 break;
             default:
                 break;

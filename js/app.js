@@ -1,6 +1,20 @@
 $(function() {
     links.init();
+    Pace.on('done', function() {
+        $("#wrapper").show();
+    });
 });
+
+var fnc = function() {
+    return {
+        afterLogin: function() {
+            $("body").removeClass("login");
+        },
+        afterLogout: function() {
+            $("body").addClass("login");
+        }
+    };
+}();
 
 var links = function() {
     return {
@@ -57,9 +71,28 @@ var links = function() {
         init: function() {
             links.click();
             links.load();
+
+            //logout
+            $("#logout").on("click", function(e) {
+                e.preventDefault();
+                links.logout();
+            });
         },
         load: function() {
-            var link = window.location.hash.split('#')[1];
+            var link, hash = window.location.hash;
+            switch (hash) {
+                case "":
+                case "#/":
+                    link = "/main/home";
+                    window.location.hash = '#/' + link;
+                    break;
+                default :
+                    link = window.location.hash.split('#')[1];
+                    break;
+            }
+
+            links.verificaLogin();
+
             var req = links.getUrl(link);
             links.getPage(req.url, req.params, req.script);
         },
@@ -97,32 +130,36 @@ var links = function() {
             
             return {url: url, params: params, script: link[1]};
         },
+        logout: function() {
+            $.ajax({
+                url: '../queryAjax.php',
+                data: {tipo: "logout"},
+                type: "post"
+            }).success(function(data) {
+                data = JSON.parse(data);
+                window.location.hash = data.redirect;
+                var link = links.getUrl(data.redirect);
+                links.getPage(link.url, link.params, link.script);
+                fnc.afterLogout();
+            });
+        },
         verificaLogin: function() {
             $.ajax({
                 url: "../queryAjax.php",
-                type: "POST"
+                type: "POST",
+                data: {tipo: "verificaLogin"}
             }).success(function(data) {
-                console.log(data);
-                try {
-                    data = JSON.parse(data);
-                    if (data.error) {
-                        console.log(data.error);
+                var data = JSON.parse(data);
+                if (data.redirect !== "") {
+                    window.location.hash = data.redirect;
+                    var link = links.getUrl(data.redirect);
+                    links.getPage(link.url, link.params, link.script);
                     } else {
-
-                        window.location.hash = data.redirect;
-
-                        // var link = links.getUrl(data.redirect);
-                        //window.location
-                        //links.getPage(link.url, link.params, link.script);
-                    }
-                } catch (e) {
-                    alert("Erro: " + e);
+                    fnc.afterLogin();
                 }
             }).error(function(data) {
                 console.log('error', data);
             });
         }
-
-        
     };
 }();
