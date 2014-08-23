@@ -286,19 +286,40 @@ if (isset($_POST['act'])) {
             if ((isset($_POST['idAluno']))) {
                 $idAluno = (string) trim($_POST['idAluno']);
                 if ($idAluno !== "") {
-                    $sql = "select * from grupo g " .
+                    $sql = "select g.idGrupo,g.titulo ,p.idProfessor,p.nome from grupo g " .
                             "inner join grupoaluno ga " .
                             "on g.idGrupo = ga.idGrupo " .
                             "inner join professor p " .
-                            "on g.idProfessor = p.idProfessor" .
-                            " where ga.idAluno = $idAluno";
+                            "on g.idProfessor = p.idProfessor " .
+                            "where ga.idAluno = $idAluno";
+                  
                     $con = Database::getCon();
                     $query = mysqli_query($con, $sql);
+                    $retorno = array();
                     if (mysqli_num_rows($query)) {
                         while ($row = mysqli_fetch_assoc($query)) {
-                            $retorno = array_merge($row, $retorno);
-                            retorno($retorno);
+                            $retorno[] = $row;
                         }
+                        retorno($retorno);
+                    }
+                }
+            }
+            break;
+        case 'listarAulas':
+            if ((isset($_POST['idGrupo']))) {
+                $idGrupo = (string) trim($_POST['idGrupo']);
+                if ($idGrupo !== "") {
+                    $sql = "Select * from aula a inner join grupoaula ga on a.idAula = ga.idAula" .
+                            " where ga.idGrupo = $idGrupo";
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    $retorno = array();
+                    if (mysqli_num_rows($query)) {
+                        while ($row = mysqli_fetch_assoc($query)) {
+                            $retorno[] = $row;
+                           
+                        }
+                         retorno($retorno);
                     }
                 }
             }

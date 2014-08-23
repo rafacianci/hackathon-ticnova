@@ -1,30 +1,25 @@
-//$(function() {
-//    aulas.init();
-//
-//});
-
-var videos = function() {
+var grupo = function() {
     return {
         init: function() {
-            videos.click();
+            grupo.click();
         },
         click: function() {
-            $("#bt-editar-videos").on("click", function() {
+            $("#bt-editar-grupo").on("click", function() {
                 var fd = new FormData();
-                fd.append("idVideo", $("#idVideo").val());
+                fd.append("idGrupo", $("#idGrupo").val());
                 fd.append("titulo", $("#titulo").val());
-                fd.append("url", $("#url").val());
                 fd.append("tipo", $(this).attr("data-type"));
-                videos.ajaxContent(fd);
+                grupo.ajaxContent(fd);
             });
 
-            $("#bt-cadastrar-videos").on("click", function() {
+            $("#bt-cadastrar-grupo").on("click", function() {
                 var fd = new FormData();
                 fd.append("titulo", $("#titulo").val());
-                fd.append("url", $("#url").val());
                 fd.append("tipo", $(this).attr("data-type"));
-                videos.ajaxContent(fd);
+                grupo.ajaxContent(fd);
             });
+
+
 
         },
         ajaxContent: function(fd) {
@@ -35,6 +30,7 @@ var videos = function() {
                 processData: false, // tell jQuery not to process the data
                 contentType: false   // tell jQuery not to set contentType
             }).success(function(msg) {
+                console.log(msg);
                 try {
                     data = JSON.parse(msg);
                     if (data.redirect) {
