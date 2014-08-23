@@ -17,8 +17,6 @@ var auth = function() {
                         window.location.hash = data.redirect;
                         var link = links.getUrl(data.redirect);
                         fnc.afterLogin(links.getPage(link.url, link.params, link.script));
-//                        links.getPage(link.url, link.params, link.script);
-//                        fnc.afterLogin();
                     }
                 });
             });
