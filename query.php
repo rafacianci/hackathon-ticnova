@@ -26,10 +26,10 @@ class Query {
     public static function pegarAlternativa($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "select a.*, q.titulo q_titulo "
-                                . "from alternativa a "
-                           . "left join questao q "
-                                  . "on a.idQuestao = q.idQuestao "
-                               . "where a.idQuestao = {$id} ");
+                . "from alternativa a "
+                . "left join questao q "
+                . "on a.idQuestao = q.idQuestao "
+                . "where a.idQuestao = {$id} ");
         $r = array();
 
         if (null !== $q) {
@@ -49,9 +49,57 @@ class Query {
         return $r;
     }
 
+    public static function pegarAulasRelacionadas($id, $prof) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT a . * FROM aula a WHERE a.idProfessor = {$prof} AND a.idAula NOT IN (SELECT idAula FROM grupoaula WHERE idGrupo = {$id})");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
     public static function pegarAulas($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "select * from aula where idProfessor = {$id} order by data desc");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
+    public static function pegarAulasGrupo($id, $prof) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select a.*, g.status from aula a LEFT JOIN grupoaula g on (a.idAula = g.idAula) where a.idProfessor = {$prof} and g.idGrupo = {$id} order by data desc");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
+    public static function pegarGrupo($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select * from grupo where idGrupo = {$id}");
+        return mysqli_fetch_assoc($q);
+    }
+
+    public static function pegarGrupos($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select * from grupo where idProfessor = {$id}");
         $r = array();
 
         if (null !== $q) {
@@ -86,7 +134,7 @@ class Query {
         $con = Database::getCon();
         $q = mysqli_query($con, "SELECT * FROM questionario
                                   WHERE idQuestionario = {$id}");
-                                  
+
         return mysqli_fetch_assoc($q);
     }
 
@@ -208,7 +256,7 @@ class Query {
                 . "left join questao q on(q.idQuestao = a.idQuestao)"
                 . "order by r.idAluno";
         $qResposta = mysqli_query($con, $queryResposta);
-        
+
         $respostas = array();
         if (mysqli_num_rows($qResposta)) {
             while ($row = mysqli_fetch_assoc($qResposta)) {
@@ -238,7 +286,7 @@ class Query {
         return $r;
     }
 
-    public static function pegarSlideImg($id ) {
+    public static function pegarSlideImg($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "SELECT * FROM slideimg WHERE idSlide = {$id}");
         $r = array();
@@ -285,4 +333,5 @@ class Query {
 
         return $q;
     }
+
 }

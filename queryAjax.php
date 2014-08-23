@@ -8,6 +8,16 @@ $con = Database::getCon();
 if ($_POST) {
     if (isset($_POST['tipo'])) {
         switch ($_POST['tipo']) {
+            case "ativarAula":
+                $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
+                $idGrupo = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
+                $status = (isset($_POST['status'])) ? $_POST['status'] : null;
+                $status = ($status) ? 0 : 1;
+                $q = mysqli_query($con, "UPDATE grupoaula SET status = {$status} WHERE idGrupo = {$idGrupo} and idAula = {$idAula}");
+                echo json_encode(array(
+                    "redirect" => "#/grupo/aulas/idGrupo/".$idGrupo,
+                ));
+                break;
             case "cadastrarAula":
                 $data = (isset($_POST['data'])) ? $_POST['data'] : null;
                 $data = dateDb($data);
@@ -59,8 +69,6 @@ if ($_POST) {
                     mysqli_query($con, "INSERT INTO alternativa (titulo, correta, idQuestao) VALUES ('{$value}', '{$c}', '{$q}')");
                     $i++;
                 }
-                
-                
                 echo json_encode(array(
                     "redirect" => "#/questionario/questoes/idQuestionario/".$idQuest,
                 ));
@@ -101,6 +109,15 @@ if ($_POST) {
                 
                 echo json_encode(array(
                     "redirect" => "#/aula/listar",
+                ));
+                break;
+            case "editarGrupo":
+                $id = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
+                $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
+                $q = mysqli_query($con, "UPDATE grupo SET titulo = '{$titulo}' where idGrupo = {$id}");
+                
+                echo json_encode(array(
+                    "redirect" => "#/grupo/listar",
                 ));
                 break;
             case "editarQuestao":
@@ -152,6 +169,14 @@ if ($_POST) {
                 $q = mysqli_query($con, "INSERT INTO aulamaterial (idAula, idMaterial, tipo) values ('{$idAula}','{$idMaterial}','{$cdTipo}')");
                 echo json_encode(array(
                     "redirect" => "#/aula/relacionar/cdTipo/".$cdTipo."/idAula/".$idAula,
+                ));
+                break;
+            case "relacionarAulas":
+                $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
+                $idGrupo = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
+                mysqli_query($con, "INSERT INTO grupoaula (idAula, idGrupo) values ('{$idAula}','{$idGrupo}')");
+                echo json_encode(array(
+                    "redirect" => "#/grupo/relacionar/idGrupo/".$idGrupo,
                 ));
                 break;
             default:

@@ -74,7 +74,19 @@ require_once './db.php';
                                 <a class="active ajax" href="#"><i class="fa fa-dashboard fa-fw"></i> Início</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Aulas<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-group fa-fw"></i> Grupos<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a class="ajax" href="#/grupo/listar" rel="/grupo/listar.php">Listar</a>
+                                    </li>
+                                    <li>
+                                        <a class="ajax" href="#/grupo/cadastrar" rel="/grupo/cadastrar.php">Cadastrar</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-book fa-fw"></i> Aulas<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a class="ajax" href="#/aula/listar" rel="/aula/listar.php">Listar</a>
@@ -86,7 +98,7 @@ require_once './db.php';
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Videos<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-youtube-play fa-fw"></i> Videos<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a class="ajax" href="#/videos/listar">Listar</a>
@@ -98,7 +110,7 @@ require_once './db.php';
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Slides<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-image fa-fw"></i> Slides<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a class="ajax" href="#/slides/listar">Listar</a>
@@ -110,7 +122,7 @@ require_once './db.php';
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Questionários<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-list fa-fw"></i> Questionários<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a class="ajax" href="#/questionario/listar">Listar</a>
