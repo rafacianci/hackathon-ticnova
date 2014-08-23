@@ -8,7 +8,10 @@ $(function() {
 var fnc = function() {
     return {
         afterLogin: function() {
-            $("body").removeClass("login");
+            Pace.restart();
+            Pace.on('done', function() {
+                $("body").removeClass("login");
+            });
         },
         afterLogout: function() {
             $("body").addClass("login");
@@ -43,9 +46,7 @@ var links = function() {
         },
         click: function() {
             $(".ajax").unbind('click').on('click', function() {
-                var file = $(this).attr('href');
-                var req = links.getUrl(file);
-                links.getPage(req.url, req.params, req.script);
+                links.loadPageAjax(this);
             });
 
             $(".ajax-confirm").unbind('click').on('click', function(e) {
@@ -82,8 +83,9 @@ var links = function() {
             var link, hash = window.location.hash;
             switch (hash) {
                 case "":
+                    link = "/";
                 case "#/":
-                    link = "/main/home";
+                    link += "main/home";
                     window.location.hash = '#/' + link;
                     break;
                 default :
@@ -95,6 +97,13 @@ var links = function() {
 
             var req = links.getUrl(link);
             links.getPage(req.url, req.params, req.script);
+        },
+        loadPageAjax: function(a) {
+            links.verificaLogin(function() {
+                var file = $(a).attr('href');
+                var req = links.getUrl(file);
+                links.getPage(req.url, req.params, req.script);
+            });
         },
         getPage: function(file, data, script) {
             $.ajax({
@@ -127,7 +136,7 @@ var links = function() {
                 v = link[i];
                 params[k] = v;
             }
-            
+
             return {url: url, params: params, script: link[1]};
         },
         logout: function() {
@@ -143,7 +152,7 @@ var links = function() {
                 fnc.afterLogout();
             });
         },
-        verificaLogin: function() {
+        verificaLogin: function(loadPageAjax) {
             $.ajax({
                 url: "../queryAjax.php",
                 type: "POST",
@@ -151,11 +160,15 @@ var links = function() {
             }).success(function(data) {
                 var data = JSON.parse(data);
                 if (data.redirect !== "") {
+                    fnc.afterLogout();
                     window.location.hash = data.redirect;
                     var link = links.getUrl(data.redirect);
                     links.getPage(link.url, link.params, link.script);
-                    } else {
+                } else {
                     fnc.afterLogin();
+                    if (loadPageAjax) {
+                        loadPageAjax();
+                    }
                 }
             }).error(function(data) {
                 console.log('error', data);
