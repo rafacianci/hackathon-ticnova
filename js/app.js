@@ -127,7 +127,7 @@ var links = function() {
                 v = link[i];
                 params[k] = v;
             }
-
+            
             return {url: url, params: params, script: link[1]};
         },
         logout: function() {
@@ -154,7 +154,7 @@ var links = function() {
                     window.location.hash = data.redirect;
                     var link = links.getUrl(data.redirect);
                     links.getPage(link.url, link.params, link.script);
-                } else {
+                    } else {
                     fnc.afterLogin();
                 }
             }).error(function(data) {

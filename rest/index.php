@@ -207,14 +207,14 @@ if (isset($_POST['act'])) {
             break;
         case 'verificaAluno':
 
-            if ((isset($_POST['login'])) && (isset($_POST['senha']))) {
+            if ((isset($_POST['email'])) && (isset($_POST['senha']))) {
 
-                $login = $_POST['login'];
+                $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
 
-                if (null !== $login && null !== $senha) {
-                    $sql = "select * from aluno where login = '$login' and senha = '$senha' ";
+                if (null !== $email && null !== $senha) {
+                    $sql = "select * from aluno where email = '$email' and senha = '$senha' ";
                 }
 
                 $con = Database::getCon();
@@ -229,17 +229,16 @@ if (isset($_POST['act'])) {
                     retorno($retorno);
                 }
             } else {
-                $retorno["msg_error"] = "Informe login e senha";
+                $retorno["msg_error"] = "Informe email e senha";
                 retorno($retorno);
             }
             break;
         case 'salvarResposta':
+
             if ((isset($_POST['idAluno'])) && (isset($_POST['id']))) {
 
                 $idAluno = $_POST['idAluno'];
                 $id = $_POST['id'];
-
-
 
                 if ((null !== $idAluno) and ( null !== $id)) {
                     $con = Database::getCon();
@@ -259,6 +258,30 @@ if (isset($_POST['act'])) {
                 $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
             }
             retorno($retorno);
+            break;
+        case 'cadastrarAluno':
+            if ((isset($_POST['nome'])) && (isset($_POST['email'])) && (isset($_POST['senha']))) {
+                $nome = (string) trim($_POST['nome']);
+                $email = (string) trim($_POST['email']);
+                $senha = (string) trim($_POST['senha']);
+
+                if ($nome !== "" && $email !== "" && $senha !== "") {
+                    $sql = "select * from aluno where email = '$email'";
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    $nRowsAluno = mysqli_num_rows($query);
+                    if ($nRowsAluno == 0) {
+                        $sqlInsert = "insert into aluno ( nome,email,senha) values('$nome','$email','$senha')";
+                        $qRespostaInsert = mysqli_query($con, $sqlInsert);
+                        $id = mysqli_insert_id($con);
+                        retorno(array('idAluno'=>$id));
+                    } else {
+                        $retorno['msg_error'] = 'Email já cadastrado';
+                        retorno($retorno);
+                    }
+                }
+            }
+
             break;
         default:
             break;

@@ -41,3 +41,9 @@ img{
 .imgTable tr{
     margin: 15px auto;
 }
+
+#editQuestao .radio input,
+#cadQuestao .radio input{
+    margin-left: 20px;
+    top: -5px;
+}

@@ -14,7 +14,7 @@ require_once '../../query.php';
             <input id="idQuestionario" name="idQuestionario" type="hidden" value="<?php echo $_REQUEST['idQuestionario']; ?>" >
             <div class="form-group col-lg-6">
                 <label>Título</label>
-                <input id="titulo" name="titulo" class="form-control" type="text" value="<?php echo $quest[0]["titulo"]; ?>">
+                <input id="titulo" name="titulo" class="form-control" type="text" value="<?php echo $quest["titulo"]; ?>">
             </div>
 
         </form>
