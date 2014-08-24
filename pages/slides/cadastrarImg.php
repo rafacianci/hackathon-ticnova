@@ -6,7 +6,7 @@ $slides = Query::pegarSlideImg($_GET['idSlide']);
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h2> Slides - Imagens </h2>
+        Slides - Imagens
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
