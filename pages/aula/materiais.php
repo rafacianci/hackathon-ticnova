@@ -7,10 +7,24 @@ $materiais = Query::pegarMateriais($_GET['idAula']);
 <div class="panel panel-default">
     <div class="panel-heading">
         Materiais
-        <div class="col-lg-6 pull-right">
-            <a href="#/aula/relacionar/cdTipo/1/idAula/<?php echo $_REQUEST['idAula']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Questionário</a>
-            <a href="#/aula/relacionar/cdTipo/2/idAula/<?php echo $_REQUEST['idAula']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Slide</a>
-            <a href="#/aula/relacionar/cdTipo/3/idAula/<?php echo $_REQUEST['idAula']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Vídeos</a>
+        <div class="pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                    Opções
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/1/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Questionário</a>
+                    </li>
+                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/2/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Slide</a>
+                    </li>
+                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/3/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Vídeo</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a class="ajax" href="#/aula/listar">Listar aulas</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <!-- /.panel-heading -->

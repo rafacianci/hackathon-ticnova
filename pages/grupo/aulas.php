@@ -7,8 +7,20 @@ $aulas = Query::pegarAulasGrupo($_GET['idGrupo'], $_SESSION['user']['id']);
 <div class="panel panel-default">
     <div class="panel-heading">
         Aulas
-        <div class="col-lg-6 pull-right">
-            <a href="#/grupo/relacionar/idGrupo/<?php echo $_REQUEST['idGrupo']; ?>" class="ajax btn btn-default col-lg-3 col-lg-offset-1">+ Aulas</a>
+        <div class="pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                    Opções
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a class="ajax" href="#/grupo/relacionar/idGrupo/<?php echo $_REQUEST['idGrupo']; ?>">Add Aula</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a class="ajax" href="#/grupo/listar">Listar grupos</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <!-- /.panel-heading -->

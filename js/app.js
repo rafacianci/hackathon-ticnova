@@ -83,10 +83,9 @@ var links = function() {
             var link, hash = window.location.hash;
             switch (hash) {
                 case "":
-                    link = "/";
                 case "#/":
-                    link += "main/home";
-                    window.location.hash = '#/' + link;
+                    link = '#/main/home';
+                    window.location.hash = link;
                     break;
                 default :
                     link = window.location.hash.split('#')[1];
