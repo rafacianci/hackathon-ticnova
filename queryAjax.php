@@ -53,11 +53,17 @@ if ($_POST) {
                 $q = mysqli_query($con, "SELECT * FROM aluno where idAluno not in (SELECT g.idAluno FROM grupoAluno g WHERE idGrupo = {$id}) And (nome LIKE '%{$nome}%' or email like '%{$nome}%')");
 
                 $conteudo = "";
-                while ($row = mysqli_fetch_assoc($q)) {
-                    $conteudo .= "<tr>"
-                            . "<td>" . $row['nome'] . "</td>"
-                            . "<td>" . $row['email'] . "</td>"
-                            . "<td><a href='#/grupo/alunos/tipo/addAluno/idGrupo/".$id."/idAluno/".$row['idAluno'] . "' class='ajax-relacionar'><i class='fa fa-plus'></i></a></td>"
+                if(mysqli_num_rows($q) > 0){
+                    while ($row = mysqli_fetch_assoc($q)) {
+                        $conteudo .= "<tr>"
+                                . "<td>" . $row['nome'] . "</td>"
+                                . "<td>" . $row['email'] . "</td>"
+                                . "<td><a href='#/grupo/alunos/tipo/addAluno/idGrupo/".$id."/idAluno/".$row['idAluno'] . "' class='ajax-relacionar'><i class='fa fa-plus'></i></a></td>"
+                                . "</tr>";
+                    }
+                }else{
+                    $conteudo = "<tr>"
+                            . "<td colspan='3'>A pesquisa não retornou nenhum resultado</td>"
                             . "</tr>";
                 }
 
