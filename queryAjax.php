@@ -8,6 +8,14 @@ $con = Database::getCon();
 if ($_POST) {
     if (isset($_POST['tipo'])) {
         switch ($_POST['tipo']) {
+            case "addAluno":
+                $idAluno = (isset($_POST['idAluno'])) ? $_POST['idAluno'] : null;
+                $idGrupo = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
+                $q = mysqli_query($con, "INSERT INTO grupoaluno (idAluno, idGrupo) values ('{$idAluno}','{$idGrupo}')");
+                echo json_encode(array(
+                    "redirect" => "#/grupo/alunos/idGrupo/" . $idGrupo,
+                ));
+                break;
             case "ativarAula":
                 $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
                 $idGrupo = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
@@ -15,8 +23,49 @@ if ($_POST) {
                 $status = ($status) ? 0 : 1;
                 $q = mysqli_query($con, "UPDATE grupoaula SET status = {$status} WHERE idGrupo = {$idGrupo} and idAula = {$idAula}");
                 echo json_encode(array(
-                    "redirect" => "#/grupo/aulas/idGrupo/".$idGrupo,
+                    "redirect" => "#/grupo/aulas/idGrupo/" . $idGrupo,
                 ));
+                break;
+            case "ativarMaterial":
+                $idAula = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
+                $idMaterial = (isset($_POST['idMaterial'])) ? $_POST['idMaterial'] : null;
+                $idTipo = (isset($_POST['idTipo'])) ? $_POST['idTipo'] : null;
+                $status = (isset($_POST['status'])) ? $_POST['status'] : null;
+                $status = (int) ($status) ? 0 : 1;
+                $q = mysqli_query($con, "UPDATE aulamaterial SET status = {$status} WHERE idMaterial = {$idMaterial} and idAula = {$idAula} and tipo = {$idTipo}");
+                echo json_encode(array(
+                    "redirect" => "#/aula/materiais/idAula/" . $idAula,
+                ));
+                break;
+            case "ativarAluno":
+                $idAluno = (isset($_POST['idAluno'])) ? $_POST['idAluno'] : null;
+                $idGrupo = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
+                $status = (isset($_POST['status'])) ? $_POST['status'] : null;
+                $status = (int) ($status) ? 0 : 1;
+                $q = mysqli_query($con, "UPDATE aluno SET status = {$status} WHERE idAluno = {$idAluno}");
+                echo json_encode(array(
+                    "redirect" => "#/grupo/alunos/idGrupo/" . $idGrupo,
+                ));
+                break;
+            case "buscarAluno":
+                $nome = (isset($_POST['nome'])) ? $_POST['nome'] : "";
+                $id = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : "";
+                $q = mysqli_query($con, "SELECT * FROM aluno where idAluno not in (SELECT g.idAluno FROM grupoAluno g WHERE idGrupo = {$id}) And (nome LIKE '%{$nome}%' or email like '%{$nome}%')");
+
+                $conteudo = "";
+                while ($row = mysqli_fetch_assoc($q)) {
+                    $conteudo .= "<tr>"
+                            . "<td>" . $row['nome'] . "</td>"
+                            . "<td>" . $row['email'] . "</td>"
+                            . "<td><a href='#/grupo/alunos/tipo/addAluno/idGrupo/".$id."/idAluno/".$row['idAluno'] . "' class='ajax-relacionar'><i class='fa fa-plus'></i></a></td>"
+                            . "</tr>";
+                }
+
+                echo json_encode(array(
+                    "aluno" => "true",
+                    "conteudo" => $conteudo
+                ));
+//                print($q);
                 break;
             case "cadastrarAula":
                 $data = (isset($_POST['data'])) ? $_POST['data'] : null;
@@ -32,11 +81,11 @@ if ($_POST) {
                 $idQuest = (isset($_POST['idQuestionario'])) ? $_POST['idQuestionario'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $idCorreta = (isset($_POST['correta'])) ? $_POST['correta'] : null;
-                
+
                 $q = mysqli_query($con, "INSERT INTO questao (titulo, idQuestionario) VALUES ('{$titulo}', {$idQuest})");
                 $q = mysqli_insert_id($con);
-                unset($_POST['idQuestionario'], $_POST['titulo'],$_POST['correta'],$_POST['tipo']);
-                
+                unset($_POST['idQuestionario'], $_POST['titulo'], $_POST['correta'], $_POST['tipo']);
+
                 $i = 1;
                 foreach ($_POST as $key => $value) {
                     $c = (int) ($i == $idCorreta);
@@ -44,18 +93,18 @@ if ($_POST) {
                     $i++;
                 }
                 echo json_encode(array(
-                    "redirect" => "#/questionario/questoes/idQuestionario/".$idQuest,
+                    "redirect" => "#/questionario/questoes/idQuestionario/" . $idQuest,
                 ));
                 break;
             case "cadastrarQuestaquiz":
                 $idQuiz = (isset($_POST['idQuiz'])) ? $_POST['idQuiz'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $idCorreta = (isset($_POST['correta'])) ? $_POST['correta'] : null;
-                
+
                 $q = mysqli_query($con, "INSERT INTO questaoquiz (titulo, idQuiz) VALUES ('{$titulo}', {$idQuiz})");
                 $q = mysqli_insert_id($con);
-                unset($_POST['idQuiz'], $_POST['titulo'],$_POST['correta'],$_POST['tipo']);
-                
+                unset($_POST['idQuiz'], $_POST['titulo'], $_POST['correta'], $_POST['tipo']);
+
                 $i = 1;
                 foreach ($_POST as $key => $value) {
                     $c = (int) ($i == $idCorreta);
@@ -63,7 +112,7 @@ if ($_POST) {
                     $i++;
                 }
                 echo json_encode(array(
-                    "redirect" => "#/quiz/questoes/idQuiz/".$idQuiz,
+                    "redirect" => "#/quiz/questoes/idQuiz/" . $idQuiz,
                 ));
                 break;
             case "cadastrarQuiz":
@@ -90,7 +139,7 @@ if ($_POST) {
                 $q = mysqli_query($con, "INSERT INTO slideimg (url, ordem, idSlide) values ('{$url}',0,'{$idSlide}')");
                 echo "INSERT INTO slideimg (url, ordem, idSlide) values ('{$url}',0,'{$idSlide}')";
                 echo json_encode(array(
-                    "redirect" => "#/slides/cadastrarImg/idSlide/".$idSlide,
+                    "redirect" => "#/slides/cadastrarImg/idSlide/" . $idSlide,
                 ));
                 break;
             case "cadastrarVideos":
@@ -115,19 +164,19 @@ if ($_POST) {
                 $idMaterial = (isset($_POST['idMaterial'])) ? $_POST['idMaterial'] : null;
                 $idTipo = (isset($_POST['idTipo'])) ? $_POST['idTipo'] : null;
                 $q = mysqli_query($con, "DELETE FROM aulamaterial where idAula = {$idAula} and idMaterial = {$idMaterial} and tipo = {$idTipo}");
-                
+
                 echo json_encode(array(
                     "msg" => "Passou",
-                    "redirect" => "#/aula/materiais/idAula/".$idAula,
+                    "redirect" => "#/aula/materiais/idAula/" . $idAula,
                 ));
-                break; 
+                break;
             case "editarAula":
                 $id = (isset($_POST['idAula'])) ? $_POST['idAula'] : null;
                 $data = (isset($_POST['data'])) ? $_POST['data'] : null;
                 $data = dateDb($data);
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $q = mysqli_query($con, "UPDATE aula SET data = '{$data}', titulo = '{$titulo}' where idAula = {$id}");
-                
+
                 echo json_encode(array(
                     "redirect" => "#/aula/listar",
                 ));
@@ -136,7 +185,7 @@ if ($_POST) {
                 $id = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $q = mysqli_query($con, "UPDATE grupo SET titulo = '{$titulo}' where idGrupo = {$id}");
-                
+
                 echo json_encode(array(
                     "redirect" => "#/grupo/listar",
                 ));
@@ -145,15 +194,15 @@ if ($_POST) {
                 $idQuest = (isset($_POST['idQuestao'])) ? $_POST['idQuestao'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $idCorreta = (isset($_POST['correta'])) ? $_POST['correta'] : null;
-                
+
                 $q = mysqli_query($con, "UPDATE questao SET titulo = '{$titulo}' where idQuestao = {$idQuest}");
-                unset($_POST['idQuestao'], $_POST['titulo'],$_POST['correta'],$_POST['tipo']);
+                unset($_POST['idQuestao'], $_POST['titulo'], $_POST['correta'], $_POST['tipo']);
                 foreach ($_POST as $key => $value) {
                     $c = (int) ($key == $idCorreta);
                     mysqli_query($con, "UPDATE alternativa SET titulo = '{$value}', correta = $c where idAlternativa = {$key}");
                 }
                 echo json_encode(array(
-                    "redirect" => "#/questionario/edit-questao/idQuestao/".$idQuest,
+                    "redirect" => "#/questionario/edit-questao/idQuestao/" . $idQuest,
                 ));
                 break;
             case "editarQuestaoquiz":
@@ -161,24 +210,24 @@ if ($_POST) {
                 $idQuiz = (isset($_POST['idQuiz'])) ? $_POST['idQuiz'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $idCorreta = (isset($_POST['correta'])) ? $_POST['correta'] : null;
-                
+
                 $q = mysqli_query($con, "UPDATE questaoquiz SET titulo = '{$titulo}' where idQuestaoquiz = {$idQuestao}");
-                unset($_POST['idQuestaoquiz'], $_POST['idQuiz'], $_POST['titulo'],$_POST['correta'],$_POST['tipo']);
+                unset($_POST['idQuestaoquiz'], $_POST['idQuiz'], $_POST['titulo'], $_POST['correta'], $_POST['tipo']);
                 foreach ($_POST as $key => $value) {
                     $c = (int) ($key == $idCorreta);
                     mysqli_query($con, "UPDATE alternativaquiz SET titulo = '{$value}', correta = $c where idAlternativaquiz = {$key}");
                 }
                 echo json_encode(array(
-                    "redirect" => "#/quiz/edit-questao/idQuestaoquiz/".$idQuestao."/idQuiz/".$idQuiz,
+                    "redirect" => "#/quiz/edit-questao/idQuestaoquiz/" . $idQuestao . "/idQuiz/" . $idQuiz,
                 ));
                 break;
             case "editarQuestionario":
                 $idQuest = (isset($_POST['idQuestionario'])) ? $_POST['idQuestionario'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $q = mysqli_query($con, "UPDATE questionario SET titulo = '{$titulo}' where idQuestionario = {$idQuest}");
-                
+
                 echo json_encode(array(
-                    "redirect" => "#/questionario/editar/idQuestionario/".$idQuest,
+                    "redirect" => "#/questionario/editar/idQuestionario/" . $idQuest,
                 ));
                 break;
             case "editarQuiz":
@@ -196,7 +245,7 @@ if ($_POST) {
                 $url = (isset($_POST['url'])) ? $_POST['url'] : null;
                 $titulo = (isset($_POST['titulo'])) ? $_POST['titulo'] : null;
                 $q = mysqli_query($con, "UPDATE video SET url = '{$url}', titulo = '{$titulo}' where idVideo = {$id}");
-                
+
                 echo json_encode(array(
                     "redirect" => "#/videos/listar",
                 ));
@@ -206,7 +255,7 @@ if ($_POST) {
                 $idSlide = (isset($_POST['idSlide'])) ? $_POST['idSlide'] : null;
                 $q = mysqli_query($con, "DELETE FROM slideimg WHERE idImg = {$idImg}");
                 echo json_encode(array(
-                    "redirect" => "#/slides/cadastrarImg/idSlide/".$idSlide,
+                    "redirect" => "#/slides/cadastrarImg/idSlide/" . $idSlide,
                 ));
                 break;
             case "login":
@@ -246,7 +295,7 @@ if ($_POST) {
                 $cdTipo = (isset($_POST['idTipo'])) ? $_POST['idTipo'] : null;
                 $q = mysqli_query($con, "INSERT INTO aulamaterial (idAula, idMaterial, tipo) values ('{$idAula}','{$idMaterial}','{$cdTipo}')");
                 echo json_encode(array(
-                    "redirect" => "#/aula/relacionar/cdTipo/".$cdTipo."/idAula/".$idAula,
+                    "redirect" => "#/aula/relacionar/cdTipo/" . $cdTipo . "/idAula/" . $idAula,
                 ));
                 break;
             case "relacionarAulas":
@@ -254,7 +303,7 @@ if ($_POST) {
                 $idGrupo = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : null;
                 mysqli_query($con, "INSERT INTO grupoaula (idAula, idGrupo) values ('{$idAula}','{$idGrupo}')");
                 echo json_encode(array(
-                    "redirect" => "#/grupo/relacionar/idGrupo/".$idGrupo,
+                    "redirect" => "#/grupo/relacionar/idGrupo/" . $idGrupo,
                 ));
                 break;
             case "verificaLogin":

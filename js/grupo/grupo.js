@@ -19,7 +19,12 @@ var grupo = function() {
                 grupo.ajaxContent(fd);
             });
 
-
+            $("#buscarAluno").on("submit", function(e) {
+                e.preventDefault();
+                var fd = new FormData($(this)[0]);
+                fd.append("tipo", "buscarAluno");
+                grupo.ajaxContent(fd);
+            });
 
         },
         ajaxContent: function(fd) {
@@ -30,13 +35,15 @@ var grupo = function() {
                 processData: false, // tell jQuery not to process the data
                 contentType: false   // tell jQuery not to set contentType
             }).success(function(msg) {
-                console.log(msg);
                 try {
                     data = JSON.parse(msg);
                     if (data.redirect) {
                         window.location.hash = data.redirect;
                         var link = links.getUrl(data.redirect);
                         links.getPage(link.url, link.params, link.script);
+                    }else if(data.aluno){
+                        $("#alunos-ajax").html(data.conteudo);
+                        links.click();
                     }
                 } catch (e) {
                     alert("Erro: " + data);

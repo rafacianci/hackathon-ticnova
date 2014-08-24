@@ -8,6 +8,7 @@ define('URL_LOGIN', '#/auth/login');
 define('MATERIAL_QUESTIONARIO', 1);
 define('MATERIAL_SLIDE', 2);
 define('MATERIAL_VIDEO', 3);
+define('MATERIAL_QUIZ', 4);
 define('QUIZ_ERROU_PERDEU', 1);
 define('QUIZ_TEMPO_MINIMO', 2);
 define('QUIZ_MENOR_TEMPO', 3);
@@ -31,6 +32,10 @@ function getTipoMaterial($id){
             break;
         case MATERIAL_VIDEO:
             return "Vídeo";
+            break;
+        default:
+        case MATERIAL_QUIZ:
+            return "Quiz";
             break;
         default:
             break;

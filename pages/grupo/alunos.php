@@ -2,12 +2,11 @@
 require_once '../../config.php';
 require_once '../../query.php';
 
-    $relacionar = Query::pegarRelacionados($_GET['idAula'], $_GET['cdTipo']);
-
+$alunos = Query::pegarAlunos($_GET['idGrupo']);
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        Relacionar <?php echo getTipoMaterial($_GET['cdTipo']); ?>
+        Alunos
         <div class="pull-right">
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -15,16 +14,10 @@ require_once '../../query.php';
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu pull-right" role="menu">
-                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/1/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Questionário</a>
-                    </li>
-                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/2/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Slide</a>
-                    </li>
-                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/3/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Vídeo</a>
-                    </li>
-                    <li><a class="ajax" href="#/aula/relacionar/cdTipo/4/idAula/<?php echo $_REQUEST['idAula']; ?>">Add Quiz</a>
+                    <li><a class="ajax" href="#/grupo/relacionar-aluno/idGrupo/<?php echo $_REQUEST['idGrupo']; ?>">Add Aluno</a>
                     </li>
                     <li class="divider"></li>
-                    <li><a class="ajax" href="#/aula/materiais/idAula/<?php echo $_REQUEST['idAula']; ?>">Listar materiais</a>
+                    <li><a class="ajax" href="#/grupo/listar">Listar grupos</a>
                     </li>
                 </ul>
             </div>
@@ -36,18 +29,22 @@ require_once '../../query.php';
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Título</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($relacionar as $material) {
+                    foreach ($alunos as $aluno) {
                         ?>
                         <tr>
-                            <td><?php echo $material['titulo']; ?></td>
+                            <td><?php echo $aluno['nome']; ?></td>
+                            <td><?php echo $aluno['email']; ?></td>
                             <td>
-                                <a href="#/aula/materiais/tipo/relacionarArquivo/idAula/<?php echo $_REQUEST['idAula'];?>/idMaterial/<?php echo $material['id'];?>/idTipo/<?php echo $_REQUEST['cdTipo'];?>" class="ajax-relacionar"><i class="fa fa-check col-lg-1"></i></a>
+                                <a href="#/grupo/alunos/tipo/ativarAluno/idGrupo/<?php echo $_REQUEST['idGrupo'];?>/idAluno/<?php echo $aluno['idAluno'];?>/status/<?php echo $aluno['status'];?>" class="ajax-relacionar" title="<?php echo ($aula['status']) ? 'Clique para bloquear' : 'Clique para desbloquear'; ?>">
+                                    <i class="fa <?php echo ($aluno['status']) ? 'fa-unlock' : 'fa-lock'; ?>  col-lg-1"></i>
+                                </a>
                             </td>
                         </tr>
                         <?php
@@ -61,4 +58,4 @@ require_once '../../query.php';
     <!-- /.panel-body -->
 </div>
 <!-- javascrtipt da Página -->
-<script src="js/aula/aula.js"></script>
+<script src="js/grupo/grupo.js"></script>
