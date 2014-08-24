@@ -42,7 +42,9 @@ $aulas = Query::pegarAulasGrupo($_GET['idGrupo'], $_SESSION['user']['id']);
                             <td><?php echo dateView($aula['data']); ?></td>
                             <td><?php echo $aula['titulo']; ?></td>
                             <td>
-                                <a href="#/grupo/aulas/tipo/ativarAula/idGrupo/<?php echo $_REQUEST['idGrupo'];?>/idAula/<?php echo $aula['idAula'];?>/status/<?php echo $aula['status'];?>" class="ajax-relacionar"><i class="fa <?php echo ($aula['status']) ? 'fa-unlock' : 'fa-lock'; ?>  col-lg-1"></i></a>
+                                <a href="#/grupo/aulas/tipo/ativarAula/idGrupo/<?php echo $_REQUEST['idGrupo'];?>/idAula/<?php echo $aula['idAula'];?>/status/<?php echo $aula['status'];?>" class="ajax-relacionar" title="<?php echo ($aula['status']) ? 'Clique para bloquear' : 'Clique para desbloquear'; ?>">
+                                    <i class="fa <?php echo ($aula['status']) ? 'fa-unlock' : 'fa-lock'; ?>  col-lg-1"></i>
+                                </a>
                             </td>
                         </tr>
                         <?php

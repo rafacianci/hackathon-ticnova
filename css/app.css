@@ -43,7 +43,9 @@ img{
 }
 
 #editQuestao .radio input,
-#cadQuestao .radio input{
+#cadQuestao .radio input,
+#editQuestaoquiz .radio input,
+#cadQuestaoquiz .radio input{
     margin-left: 20px;
     top: -5px;
 }

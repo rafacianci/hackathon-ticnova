@@ -148,6 +148,18 @@ require_once './db.php';
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>
+                            <li>
+                                <a href="#"><i class="fa fa-question-circle fa-fw"></i> Quiz<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a class="ajax" href="#/quiz/listar">Listar</a>
+                                    </li>
+                                    <li>
+                                        <a class="ajax" href="#/quiz/cadastrar">Cadastrar</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->

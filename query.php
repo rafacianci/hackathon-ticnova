@@ -41,6 +41,24 @@ class Query {
         return $r;
     }
 
+    public static function pegarAlternativaQuiz($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select a.*, q.titulo q_titulo "
+                . "from alternativaquiz a "
+                . "left join questaoquiz q "
+                . "on a.idQuestaoquiz = q.idQuestaoquiz "
+                . "where a.idQuestaoquiz = {$id} ");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+
+        return $r;
+    }
+
     public static function pegarAula($id) {
         $con = Database::getCon();
         $q = mysqli_query($con, "select * from aula where idAula = {$id}");
@@ -175,7 +193,37 @@ class Query {
         $con = Database::getCon();
         $q = mysqli_query($con, "SELECT * FROM questao
                                   WHERE idQuestionario = {$id}
-                               ORDER BY idQuestao DESC");
+                               ORDER BY idQuestao");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+        return $r;
+    }
+
+    public static function pegarQuestoesquiz($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM questaoquiz
+                                  WHERE idQuiz = {$id}
+                               ORDER BY idQuiz");
+        $r = array();
+
+        if (null !== $q) {
+            while ($row = mysqli_fetch_assoc($q)) {
+                $r[] = $row;
+            }
+        }
+        return $r;
+    }
+
+    public static function pegarQuiz($id) {
+        $con = Database::getCon();
+        $q = mysqli_query($con, "SELECT * FROM quiz
+                                  WHERE idProfessor = {$id}
+                               ORDER BY idQuiz DESC");
         $r = array();
 
         if (null !== $q) {
