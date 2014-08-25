@@ -33,9 +33,9 @@ if (isset($_POST['act'])) {
 //            exit;
 //            $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
 //            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
-            if ((isset($_POST['chave'])) && (isset($_POST['idAluno']))) {
+            if (isset($_POST['idAluno'])) {
                 $idAluno = $_POST['idAluno'];
-                $chave = $_POST['chave'];
+//                $chave = $_POST['chave'];
 
 
                 $queryRespAluno = "select q.idQuestao from resposta r "
@@ -43,7 +43,8 @@ if (isset($_POST['act'])) {
                         . "left join questao q on (q.idQuestao = a.idQuestao) "
                         . "where idAluno = '$idAluno'"
                 ;
-                //print_r($queryRespAluno);exit;  
+                echo "Chessuss";
+                print_r($queryRespAluno);exit;  
                 $con = Database::getCon();
                 $qRespAluno = mysqli_query($con, $queryRespAluno);
 
