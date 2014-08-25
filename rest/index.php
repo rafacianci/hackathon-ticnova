@@ -332,21 +332,21 @@ if (isset($_POST['act'])) {
                         retorno($retorno);
                     }
                }
-            }
+            } 
             break;
         case 'salvarResposta':
 
-            if ((isset($_POST['idAluno'])) && (isset($_POST['id']))) {
+            if ((isset($_POST['idAluno'])) && (isset($_POST['id'])) && (isset($_POST['idGrupo']))) {
 
                 $idAluno = $_POST['idAluno'];
                 $id = $_POST['id'];
+                $idGrupo = $_POST['idGrupo'];
 
-                if ((null !== $idAluno) and ( null !== $id)) {
+                if ((null !== $idAluno) and ( null !== $id) and (null !== $idGrupo)) {
                     $con = Database::getCon();
-                    $queryResposta = "insert into resposta (idAluno, idAlternativa, idGrupo) values({$idAluno}, {$id}, ("
-                            . "select idGrupo from grupoaluno where idAluno = {$idAluno}))";
+                    $queryResposta = "insert into resposta (idAluno, idAlternativa, idGrupo) values({$idAluno}, {$id}, {$idGrupo})";
                     $qResposta = mysqli_query($con, $queryResposta);
-
+                    print_r($qResposta);exit;
                     if (!$qResposta) {
                         $retorno['msg_error'] = 'Nao foi possivel gravar a resposta';
                     }
