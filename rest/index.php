@@ -20,7 +20,73 @@ if (isset($_POST['act'])) {
             $retorno['msg'] = 'Test OK';
             retorno($retorno);
             break;
-        case 'pegarAula':
+        case 'cadastrarAluno':
+            if ((isset($_POST['nome'])) && (isset($_POST['email'])) && (isset($_POST['senha']))) {
+                $nome = (string) trim($_POST['nome']);
+                $email = (string) trim($_POST['email']);
+                $senha = (string) trim($_POST['senha']);
+
+                if ($nome !== "" && $email !== "" && $senha !== "") {
+                    $sql = "select * from aluno where email = '$email'";
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    $nRowsAluno = mysqli_num_rows($query);
+                    if ($nRowsAluno == 0) {
+                        $sqlInsert = "insert into aluno ( nome,email,senha) values('$nome','$email','$senha')";
+                        $qRespostaInsert = mysqli_query($con, $sqlInsert);
+                        $id = mysqli_insert_id($con);
+                        retorno(array('idAluno' => $id));
+                    } else {
+                        $retorno['msg_error'] = 'Email já cadastrado';
+                        retorno($retorno);
+                    }
+                }
+            }
+
+            break;
+        case 'listarAulas':
+            if ((isset($_POST['idGrupo']))) {
+                $idGrupo = (string) trim($_POST['idGrupo']);
+                if ($idGrupo !== "") {
+                    $sql = "Select * from aula a inner join grupoaula ga on a.idAula = ga.idAula" .
+                            " where ga.idGrupo = $idGrupo";
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    $retorno = array();
+                    if (mysqli_num_rows($query)) {
+                        while ($row = mysqli_fetch_assoc($query)) {
+                            $retorno[] = $row;
+                           
+                        }
+                         retorno($retorno);
+                    }
+                }
+            }
+            break;
+        case 'listarGrupo':
+            if ((isset($_POST['idAluno']))) {
+                $idAluno = (string) trim($_POST['idAluno']);
+                if ($idAluno !== "") {
+                    $sql = "select g.idGrupo,g.titulo ,p.idProfessor,p.nome from grupo g " .
+                            "inner join grupoaluno ga " .
+                            "on g.idGrupo = ga.idGrupo " .
+                            "inner join professor p " .
+                            "on g.idProfessor = p.idProfessor " .
+                            "where ga.idAluno = $idAluno";
+                  
+                    $con = Database::getCon();
+                    $query = mysqli_query($con, $sql);
+                    $retorno = array();
+                    if (mysqli_num_rows($query)) {
+                        while ($row = mysqli_fetch_assoc($query)) {
+                            $retorno[] = $row;
+                        }
+                        retorno($retorno);
+                    }
+                }
+            }
+            break;
+        case 'listarMaterial':
 //            $params = null;
 //            if (isset($_POST['data'])) {
 //                if (is_string($_POST['data'])) {
@@ -35,7 +101,7 @@ if (isset($_POST['act'])) {
 //            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
             if (isset($_POST['idAluno'])) {
                 $idAluno = $_POST['idAluno'];
-//                $chave = $_POST['chave'];
+                $idAula = $_POST['idAula'];
 
 
                 $queryRespAluno = "select q.idQuestao from resposta r "
@@ -43,8 +109,8 @@ if (isset($_POST['act'])) {
                         . "left join questao q on (q.idQuestao = a.idQuestao) "
                         . "where idAluno = '$idAluno'"
                 ;
-                echo "Chessuss";
-                print_r($queryRespAluno);exit;  
+//                $queryRespAluno['msg'] = $queryRespAluno;
+//                retorno($queryRespAluno);exit;  
                 $con = Database::getCon();
                 $qRespAluno = mysqli_query($con, $queryRespAluno);
 
@@ -58,13 +124,13 @@ if (isset($_POST['act'])) {
                     $respondidas = null;
                 }
 
-                if (null !== $chave) {
+//                if (null !== $chave) {
                     $query = "select ga.*, am.*, a.titulo a_titulo, a.data a_data from grupoaula ga "
                             . "left join aula a on (a.idAula = ga.idAula) "
                             . "left join aulamaterial am on (am.idAula = ga.idAula) "
-                            . "where ga.chave = '{$chave}'"
+                            . "where ga.idAula = '{$idAula}'"
                     ;
-
+//                    echo $query;exit;
                     $q = mysqli_query($con, $query);
 
                     if (mysqli_num_rows($q)) {
@@ -203,34 +269,7 @@ if (isset($_POST['act'])) {
                         $retorno['msg_error'] = 'Aula invalida';
                         retorno($retorno);
                     }
-                }
-            }
-            break;
-        case 'verificaAluno':
-
-            if ((isset($_POST['email'])) && (isset($_POST['senha']))) {
-
-                $email = $_POST['email'];
-                $senha = $_POST['senha'];
-
-                if (null !== $email && null !== $senha) {
-                    $sql = "select * from aluno where email = '$email' and senha = '$senha' ";
-                }
-
-                $con = Database::getCon();
-                $q = mysqli_query($con, $sql);
-                if (mysqli_num_rows($q)) {
-                    while ($row = mysqli_fetch_assoc($q)) {
-                        $retorno = array_merge($row, $retorno);
-                        retorno($retorno);
-                    }
-                } else {
-                    $retorno["msg_error"] = "Aluno nao encontrado";
-                    retorno($retorno);
-                }
-            } else {
-                $retorno["msg_error"] = "Informe email e senha";
-                retorno($retorno);
+//                }
             }
             break;
         case 'salvarResposta':
@@ -259,70 +298,31 @@ if (isset($_POST['act'])) {
             }
             retorno($retorno);
             break;
-        case 'cadastrarAluno':
-            if ((isset($_POST['nome'])) && (isset($_POST['email'])) && (isset($_POST['senha']))) {
-                $nome = (string) trim($_POST['nome']);
-                $email = (string) trim($_POST['email']);
-                $senha = (string) trim($_POST['senha']);
+        case 'verificaAluno':
 
-                if ($nome !== "" && $email !== "" && $senha !== "") {
-                    $sql = "select * from aluno where email = '$email'";
-                    $con = Database::getCon();
-                    $query = mysqli_query($con, $sql);
-                    $nRowsAluno = mysqli_num_rows($query);
-                    if ($nRowsAluno == 0) {
-                        $sqlInsert = "insert into aluno ( nome,email,senha) values('$nome','$email','$senha')";
-                        $qRespostaInsert = mysqli_query($con, $sqlInsert);
-                        $id = mysqli_insert_id($con);
-                        retorno(array('idAluno' => $id));
-                    } else {
-                        $retorno['msg_error'] = 'Email já cadastrado';
+            if ((isset($_POST['email'])) && (isset($_POST['senha']))) {
+
+                $email = $_POST['email'];
+                $senha = $_POST['senha'];
+
+                if (null !== $email && null !== $senha) {
+                    $sql = "select * from aluno where email = '$email' and senha = '$senha' ";
+                }
+
+                $con = Database::getCon();
+                $q = mysqli_query($con, $sql);
+                if (mysqli_num_rows($q)) {
+                    while ($row = mysqli_fetch_assoc($q)) {
+                        $retorno = array_merge($row, $retorno);
                         retorno($retorno);
                     }
+                } else {
+                    $retorno["msg_error"] = "Aluno nao encontrado";
+                    retorno($retorno);
                 }
-            }
-
-            break;
-        case 'listarGrupo':
-            if ((isset($_POST['idAluno']))) {
-                $idAluno = (string) trim($_POST['idAluno']);
-                if ($idAluno !== "") {
-                    $sql = "select g.idGrupo,g.titulo ,p.idProfessor,p.nome from grupo g " .
-                            "inner join grupoaluno ga " .
-                            "on g.idGrupo = ga.idGrupo " .
-                            "inner join professor p " .
-                            "on g.idProfessor = p.idProfessor " .
-                            "where ga.idAluno = $idAluno";
-                  
-                    $con = Database::getCon();
-                    $query = mysqli_query($con, $sql);
-                    $retorno = array();
-                    if (mysqli_num_rows($query)) {
-                        while ($row = mysqli_fetch_assoc($query)) {
-                            $retorno[] = $row;
-                        }
-                        retorno($retorno);
-                    }
-                }
-            }
-            break;
-        case 'listarAulas':
-            if ((isset($_POST['idGrupo']))) {
-                $idGrupo = (string) trim($_POST['idGrupo']);
-                if ($idGrupo !== "") {
-                    $sql = "Select * from aula a inner join grupoaula ga on a.idAula = ga.idAula" .
-                            " where ga.idGrupo = $idGrupo";
-                    $con = Database::getCon();
-                    $query = mysqli_query($con, $sql);
-                    $retorno = array();
-                    if (mysqli_num_rows($query)) {
-                        while ($row = mysqli_fetch_assoc($query)) {
-                            $retorno[] = $row;
-                           
-                        }
-                         retorno($retorno);
-                    }
-                }
+            } else {
+                $retorno["msg_error"] = "Informe email e senha";
+                retorno($retorno);
             }
             break;
         default:
