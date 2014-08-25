@@ -87,18 +87,6 @@ if (isset($_POST['act'])) {
             }
             break;
         case 'listarMaterial':
-//            $params = null;
-//            if (isset($_POST['data'])) {
-//                if (is_string($_POST['data'])) {
-//                    $params = json_decode($_POST['data'], 1);
-//                } else {
-//                    $params = $_POST['data'];
-//                }
-//            }
-//            print_r($params); 
-//            exit;
-//            $chave = (isset($params['chave'])) ? (string) $params['chave'] : null;
-//            $idAluno = (isset($params['idAluno'])) ? (int) $params['idAluno'] : null;
             if (isset($_POST['idAluno'])) {
                 $idAluno = $_POST['idAluno'];
                 $idAula = $_POST['idAula'];
@@ -109,10 +97,16 @@ if (isset($_POST['act'])) {
                         . "left join questao q on (q.idQuestao = a.idQuestao) "
                         . "where idAluno = '$idAluno'"
                 ;
-//                $queryRespAluno['msg'] = $queryRespAluno;
-//                retorno($queryRespAluno);exit;  
+
+                $queryRespAlunoQuiz = "select q.idQuestaoquiz from respostaquiz r "
+                        . "left join alternativaquiz a on (a.idAlternativaquiz = r.idAlternativaquiz) "
+                        . "left join questaoquiz q on (q.idQuestaoquiz = a.idQuestaoquiz) "
+                        . "where idAluno = '$idAluno'"
+                ;
+
                 $con = Database::getCon();
                 $qRespAluno = mysqli_query($con, $queryRespAluno);
+                $qRespAlunoQuiz = mysqli_query($con, $queryRespAlunoQuiz);
 
                 $respondidas = array();
                 if (mysqli_num_rows($qRespAluno)) {
@@ -123,14 +117,23 @@ if (isset($_POST['act'])) {
                 } else {
                     $respondidas = null;
                 }
+                
+                $respondidasquiz = array();
+                if (mysqli_num_rows($qRespAlunoQuiz)) {
+                    while ($row = mysqli_fetch_assoc($qRespAlunoQuiz)) {
+                        $respondidasquiz[] = $row['idQuestaoquiz'];
+                    }
+                    $respondidasquiz = join(',', $respondidasquiz);
+                } else {
+                    $respondidasquiz = null;
+                }
 
-//                if (null !== $chave) {
+               if (null !== $idAula) {
                     $query = "select ga.*, am.*, a.titulo a_titulo, a.data a_data from grupoaula ga "
                             . "left join aula a on (a.idAula = ga.idAula) "
                             . "left join aulamaterial am on (am.idAula = ga.idAula) "
                             . "where ga.idAula = '{$idAula}'"
                     ;
-//                    echo $query;exit;
                     $q = mysqli_query($con, $query);
 
                     if (mysqli_num_rows($q)) {
@@ -138,7 +141,9 @@ if (isset($_POST['act'])) {
                         $idAula = null;
                         $idSlide = null;
                         $idQuestionario = null;
+                        $idQuiz = null;
                         $idQuestao = null;
+                        $idQuestaoquiz = null;
 
                         while ($row = mysqli_fetch_assoc($q)) {
                             if ($idAula !== $row['idAula']) {
@@ -210,6 +215,63 @@ if (isset($_POST['act'])) {
                                             }
                                         }
                                         break;
+                                    case MATERIAL_QUIZ:
+                                        $queryQuiz = "select q.idQuiz, q.titulo q_titulo, q.tempo q_tempo, q.tipo q_tipo"
+                                                . " from quiz q "
+                                                . "where (q.idQuiz = {$row['idMaterial']})"
+                                        ;
+
+                                        $qQuiz = mysqli_query($con, $queryQuiz);
+
+                                        if (mysqli_num_rows($qQuiz)) {
+                                            $material = array(
+                                                'idMaterial' => $row['idMaterial'],
+                                                'tipo' => $row['tipo'],
+                                            );
+
+                                            while ($rowQuiz = mysqli_fetch_assoc($qQuiz)) {
+                                                if ($idQuiz !== $rowQuiz['idQuiz']) {
+                                                    $idQuiz = $rowQuiz['idQuiz'];
+                                                    $material['titulo'] = $rowQuiz['q_titulo'];
+                                                    $material['perguntas'] = array();
+                                                }
+
+                                                if ($idQuiz == $rowQuiz['idQuiz']) {
+                                                    $queryQuestaoquiz = "select q.idQuestaoquiz, q.titulo q_titulo, a.* from questaoquiz q "
+                                                            . "left join alternativaquiz a on (a.idQuestaoquiz = q.idQuestaoquiz) "
+                                                            . "where (q.idQuiz = {$idQuiz}) "
+                                                    ;
+                                                    if (null !== $respondidasquiz) {
+                                                        $queryQuestaoquiz .= " and (q.idQuestaoquiz not in ({$respondidasquiz}))";
+                                                    }
+
+                                                    $qQuestaoquiz = mysqli_query($con, $queryQuestaoquiz);
+
+                                                    if (mysqli_num_rows($qQuestaoquiz)) {
+                                                        $i = -1;
+                                                        while ($rowQuestaoquiz = mysqli_fetch_assoc($qQuestaoquiz)) {
+                                                            if ($idQuestaoquiz !== $rowQuestaoquiz['idQuestaoquiz']) {
+                                                                $i++;
+                                                                $idQuestaoquiz = $rowQuestaoquiz['idQuestaoquiz'];
+                                                                $material['perguntas'][$i] = array(
+                                                                    'titulo' => $rowQuestaoquiz['q_titulo'],
+                                                                    'alternativas' => array(),
+                                                                );
+                                                            }
+
+                                                            if ($idQuestaoquiz == $rowQuestaoquiz['idQuestaoquiz']) {
+                                                                $material['perguntas'][$i]['alternativas'][] = array(
+                                                                    'alternativa' => $rowQuestaoquiz['idAlternativaquiz'],
+                                                                    'titulo' => $rowQuestaoquiz['titulo'],
+                                                                    'correta' => $rowQuestaoquiz['correta'],
+                                                                );
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        break;
                                     case MATERIAL_SLIDE:
                                         $querySlide = "select s.*, si.* from slide s "
                                                 . "left join slideimg si on (si.idSlide = s.idSlide) "
@@ -269,7 +331,7 @@ if (isset($_POST['act'])) {
                         $retorno['msg_error'] = 'Aula invalida';
                         retorno($retorno);
                     }
-//                }
+               }
             }
             break;
         case 'salvarResposta':
