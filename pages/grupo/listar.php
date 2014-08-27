@@ -29,7 +29,7 @@ $grupos = Query::pegarGrupos($_SESSION['user']['id']);
                             <td><?php echo $grupo['titulo']; ?></td>
                             <td>
                                 <a href="#/grupo/alunos/idGrupo/<?php echo $grupo['idGrupo'];?>" title="Alunos" class="ajax"><i class="fa fa-group fa-1x col-lg-1"></i></a>
-                                <a href="#/grupo/aulas/idGrupo/<?php echo $grupo['idGrupo'];?>" title="Aulas" class="ajax"><i class="fa fa-paperclip fa-1x col-lg-1"></i></a>
+                                <a href="#/grupo/aulas/idGrupo/<?php echo $grupo['idGrupo'];?>" title="Aulas" class="ajax"><i class="fa fa-book fa-1x col-lg-1"></i></a>
                                 <a href="#/grupo/editar/idGrupo/<?php echo $grupo['idGrupo'];?>" title="Editar" class="ajax"><i class="fa fa-edit fa-1x col-lg-1"></i></a>
                             </td>
                         </tr>
