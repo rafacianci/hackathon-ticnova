@@ -50,8 +50,7 @@ if ($_POST) {
             case "buscarAluno":
                 $nome = (isset($_POST['nome'])) ? $_POST['nome'] : "";
                 $id = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : "";
-                $q = mysqli_query($con, "SELECT * FROM aluno where idAluno not in (SELECT g.idAluno FROM grupoAluno g WHERE idGrupo = {$id}) And (nome LIKE '%{$nome}%' or email like '%{$nome}%')");
-
+                $q = mysqli_query($con, "SELECT * FROM aluno where idAluno not in (SELECT g.idAluno FROM grupoaluno g WHERE idGrupo = {$id}) And (nome LIKE '%{$nome}%' or email like '%{$nome}%')");
                 $conteudo = "";
                 if(mysqli_num_rows($q) > 0){
                     while ($row = mysqli_fetch_assoc($q)) {
