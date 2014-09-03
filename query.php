@@ -4,6 +4,29 @@ require_once '../../db.php';
 
 class Query {
 
+    public static function cadastrar($nome, $login, $senha) {
+        if ((null === $nome) or (null === $login) or ( null === $senha)) {
+            throw new Exception('Informe login e senha');
+        }
+
+        $con = Database::getCon();
+        $q = mysqli_query($con, "select * from professor where email = '{$login}'");
+        $r = mysqli_num_rows($q);
+
+        if ($r > 0) {
+            throw new Exception('Já existe um professom com este e-mail cadastrado');
+        }else{
+            $q = mysqli_query($con, "INSERT INTO professor (nome, email, senha, status) VALUES ('{$nome}','{$login}','{$senha}',1)");
+            
+            $_SESSION['user'] = array(
+                'id' => mysqli_insert_id($con),
+                'nome' => $nome,
+            );
+
+            header('location: /index.php');
+        }
+    }
+
     public static function login($login, $senha) {
         if ((null === $login) or ( null === $senha)) {
             throw new Exception('Informe login e senha');

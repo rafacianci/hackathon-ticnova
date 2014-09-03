@@ -1,6 +1,9 @@
 var auth = function() {
     return {
         init: function() {
+            $('.cadastrar').on("click", function(){
+               $(".formulario").toggleClass('cadastrar'); 
+            });
             $("#frmLogin").on("submit", function(e) {
                 e.preventDefault();
                 var fd = new FormData(this);

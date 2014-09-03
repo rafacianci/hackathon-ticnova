@@ -1,7 +1,47 @@
+.navbar-header{
+    display: inline-block;
+    width: 49%;
+}
+
+.navbar-toggle{
+    float: left;
+    margin-left: 15px;
+}
+
+.navbar-top-links{
+    width: 49%;
+    display: inline-block;
+}
+
+.navbar-top-links li:last-child{
+    float: right;
+}
+
+#frmCadastrar{
+    display: none;
+}
+
+.cadastrar #frmLogin{
+    display: none;
+}
+
+.cadastrar #frmCadastrar{
+    display: block;
+}
+
 #wrapper, 
+body.login .navbar, 
 body.login .sidebar-nav, 
 body.login .navbar-top-links {
     display: none;
+}
+
+#frmLogin .btn,
+#frmCadastrar .btn{
+    padding: 10px 0;
+    top: 0;
+    margin: 2%;
+    width: 45%;
 }
 
 body.login #page-wrapper{
