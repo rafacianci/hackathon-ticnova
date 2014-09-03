@@ -3,13 +3,17 @@ require_once '../../config.php';
 require_once '../../query.php';
 
 if ($_POST) {
+        print_r($_POST);
     if(isset($_POST['nome'])){
+        print_r($_POST);
+        exit;
         $nome = (isset($_POST['nome'])) ? $_POST['nome'] : null;        
         $idAluno = (isset($_POST['login'])) ? $_POST['login'] : null;
         $senha = (isset($_POST['senha'])) ? $_POST['senha'] : null;
 
         Query::cadastrar($nome, $idAluno, md5($senha));        
     }else{
+        exit;
         $idAluno = (isset($_POST['login'])) ? $_POST['login'] : null;
         $senha = (isset($_POST['senha'])) ? $_POST['senha'] : null;
 

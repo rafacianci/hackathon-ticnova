@@ -52,15 +52,15 @@ if ($_POST) {
                 $id = (isset($_POST['idGrupo'])) ? $_POST['idGrupo'] : "";
                 $q = mysqli_query($con, "SELECT * FROM aluno where idAluno not in (SELECT g.idAluno FROM grupoaluno g WHERE idGrupo = {$id}) And (nome LIKE '%{$nome}%' or email like '%{$nome}%')");
                 $conteudo = "";
-                if(mysqli_num_rows($q) > 0){
+                if (mysqli_num_rows($q) > 0) {
                     while ($row = mysqli_fetch_assoc($q)) {
                         $conteudo .= "<tr>"
                                 . "<td>" . $row['nome'] . "</td>"
                                 . "<td>" . $row['email'] . "</td>"
-                                . "<td><a href='#/grupo/alunos/tipo/addAluno/idGrupo/".$id."/idAluno/".$row['idAluno'] . "' class='ajax-relacionar'><i class='fa fa-plus'></i></a></td>"
+                                . "<td><a href='#/grupo/alunos/tipo/addAluno/idGrupo/" . $id . "/idAluno/" . $row['idAluno'] . "' class='ajax-relacionar'><i class='fa fa-plus'></i></a></td>"
                                 . "</tr>";
                     }
-                }else{
+                } else {
                     $conteudo = "<tr>"
                             . "<td colspan='3'>A pesquisa não retornou nenhum resultado</td>"
                             . "</tr>";
@@ -71,6 +71,34 @@ if ($_POST) {
                     "conteudo" => $conteudo
                 ));
 //                print($q);
+                break;
+            case "cadastro":
+                $nome = (isset($_POST['nome'])) ? $_POST['nome'] : null;
+                $login = (isset($_POST['login'])) ? $_POST['login'] : null;
+                $senha = (isset($_POST['senha'])) ? md5($_POST['senha']) : null;
+
+                if ((null === $login) or ( null === $senha)) {
+                    throw new Exception('Informe login e senha');
+                }
+
+                $q = mysqli_query($con, "select * from professor where email = '{$login}'");
+
+                if (mysqli_num_rows($q) > 0) {
+                    echo json_encode(array(
+                        "redirect" => "",
+                    ));
+                } else {
+                    $q = mysqli_query($con, "INSERT INTO professor (nome, email, senha, status) VALUES ('{$nome}','{$login}','{$senha}',1)");
+
+                    $_SESSION['user'] = array(
+                        'id' => mysqli_insert_id($con),
+                        'nome' => $nome,
+                    );
+                    
+                    echo json_encode(array(
+                        "redirect" => "#/main/home",
+                    ));
+                }
                 break;
             case "cadastrarAula":
                 $data = (isset($_POST['data'])) ? $_POST['data'] : null;
