@@ -31,7 +31,7 @@ if ($_POST) {
             <form id="frmLogin" role="form">
                 <fieldset>
                     <div class="form-group">
-                        <input id="login" class="form-control" placeholder="login" name="login" type="email" autofocus required>
+                        <input id="login" class="form-control" placeholder="email" name="login" type="email" autofocus required>
                     </div>
                     <div class="form-group">
                         <input id="senha" class="form-control" placeholder="senha" name="senha" type="password" required>
@@ -47,7 +47,7 @@ if ($_POST) {
                         <input id="nome" class="form-control" placeholder="nome" name="nome" type="text" autofocus required>
                     </div>
                     <div class="form-group">
-                        <input id="login" class="form-control" placeholder="login" name="login" type="email" autofocus required>
+                        <input id="login" class="form-control" placeholder="email" name="login" type="email" autofocus required>
                     </div>
                     <div class="form-group">
                         <input id="senha" class="form-control" placeholder="senha" name="senha" type="password" required>
