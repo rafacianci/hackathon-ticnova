@@ -56,8 +56,8 @@ require_once './db.php';
         <div id="wrapper">
 
             <!-- Navigation -->
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
+            <nav class="navbar navbar-default navbar-static-top " role="navigation" style="margin-bottom: 0">
+                <div class="col-xs-4 navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -65,8 +65,11 @@ require_once './db.php';
                         <span class="icon-bar"></span>
                     </button>
                 </div>
+                <div class="logo col-xs-4">
+                    <img src="/img/logo.jpg" />
+                </div>
                 <!-- /.navbar-header -->
-                <ul class="nav navbar-top-links navbar-right">
+                <ul class="nav navbar-top-links navbar-right col-xs-4">
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -166,9 +169,12 @@ require_once './db.php';
                 </div>
                 <!-- /.navbar-static-side -->
             </nav>
-
+            <div class="row logo-login">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <img src="../../img/logo-teach.jpg" />
+                </div>
+            </div>
             <div id="page-wrapper">
-                <!-- /.row -->
                 <!-- /.row -->
                 <div class="row">
                     <div id="content" class="col-lg-12"></div>
